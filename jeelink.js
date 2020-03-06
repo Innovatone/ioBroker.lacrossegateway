@@ -1605,7 +1605,7 @@ function main() {
             client.setEncoding('utf-8');
             client.on('data', function(data) {
                 //var data1 = data.toString();
-                adapter.log.info(' 0 - data received: ' + data) ;
+                adapter.log.debug(' 0 - data received: ' + data) ;
 		        console.log('recv data = '+ data) ;
                 if ( data.startsWith('H0')){
                     logHMS100TF(data);
@@ -1650,7 +1650,7 @@ function main() {
             adapter.log.info('open');
             client1.setEncoding('utf-8');
             client1.on('data', function (data) {
-                adapter.log.info('1 - data received: ' + data);
+                adapter.log.debug('1 - data received: ' + data);
                 console.log('recv data = ' + data);
                 if (data.startsWith('H0')) {
                     logHMS100TF(data);
