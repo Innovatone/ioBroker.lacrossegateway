@@ -1595,7 +1595,6 @@ function main() {
 	adapter.log.debug('configured IP port : ' + adapter.config.ipport );
     adapter.log.debug('options : ' + JSON.stringify(options) );	
     const client = new TcpClient.Socket();
-    const client1 = new TcpClient.Socket();
     	//const client = new net.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
     client.connect(adapter.config.ipport, adapter.config.ipaddress, function (error) {
         if ( error ) {
@@ -1606,7 +1605,7 @@ function main() {
             client.setEncoding('utf-8');
             client.on('data', function(data) {
                 //var data1 = data.toString();
-                adapter.log.debug('data received: ' + data) ;
+                adapter.log.info(' 0 - data received: ' + data) ;
 		        console.log('recv data = '+ data) ;
                 if ( data.startsWith('H0')){
                     logHMS100TF(data);
@@ -1642,6 +1641,7 @@ function main() {
             }
         }
     });
+    const client1 = new TcpClient.Socket();
     client1.connect(8183, '192.168.2.207', function (error) {
         if (error) {
             adapter.log.info('failed to open: ' + error);
@@ -1650,7 +1650,7 @@ function main() {
             adapter.log.info('open');
             client1.setEncoding('utf-8');
             client1.on('data', function (data) {
-                adapter.log.debug('data received: ' + data);
+                adapter.log.info('1 - data received: ' + data);
                 console.log('recv data = ' + data);
                 if (data.startsWith('H0')) {
                     logHMS100TF(data);
