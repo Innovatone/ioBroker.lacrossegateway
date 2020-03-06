@@ -1604,41 +1604,37 @@ function main() {
 	    //const parser = sp.pipe(new Readline({ delimiter: '\r\n' }));
 		//const parser = new Readline({ delimiter: '\r\n' });
         //sp.pipe(parser);
-            client.socket.setEncoding
             client.on('data', function(data) {
-
-                adapter.log.info('data received: ' + data);
-		console.log('recv data = '+ data);
+            adapter.log.info('data received: ' + data);
+		    console.log('recv data = '+ data);
                // if ( data.startsWith('H0')){
                //     logHMS100TF(data);
                // }
                // else {
-                    var tmp = data.split(' ');
-                    if(tmp[0]==='OK'){
-                        if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
-                           logLaCrosseDTH(data);
-                        }
-	                else if (tmp[1]=== '22'){ //22 ist fix für EC3000
-                            logEC3000(data);
-                         }
-                        else if (tmp[1]=== 'EMT7110'){ // EMT7110 ist fix für EMT7110
-                            logEMT7110(data);
-                         }
-			 else if (tmp[1]=== 'LS'){ // LS fix für level
-                            logLevel(data);
-                         }
-                         else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
-                           logLaCrosseBMP180(data);
-                           logLaCrosseWS(data);
-                         }
-                        else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
-                                logemonTH(data);
-                                logemonWater(data);
-                        }
+            var tmp = data.split(' ');
+            if(tmp[0]==='OK'){
+                if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
+                    logLaCrosseDTH(data);
                     }
+	            else if (tmp[1]=== '22'){ //22 ist fix für EC3000
+                    logEC3000(data);
+                    }
+                else if (tmp[1]=== 'EMT7110'){ // EMT7110 ist fix für EMT7110
+                    logEMT7110(data);
+                    }
+			    else if (tmp[1]=== 'LS'){ // LS fix für level
+                    logLevel(data);
+                    }
+                else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
+                    logLaCrosseBMP180(data);
+                    logLaCrosseWS(data);
+                    }
+                else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
+                    logemonTH(data);
+                    logemonWater(data);
+                    }
+                }
                // }
-
-
             });
 	    if (adapter.config.command_en) {
                 setTimeout(write_cmd(adapter.config.command) , 1500); //1,5s Verzögerung
