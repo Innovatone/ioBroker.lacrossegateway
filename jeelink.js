@@ -1145,16 +1145,18 @@ function logLaCrosseDTH(data){
                 if (array[0].stype ===  'LaCrosseDTH') {
                     // calculate and write values for LaCrosseDTH sensors
                     adapter.setState('LaCrosse_'+ array[0].usid +'.temp', {val: ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10), ack: true});
-                    adapter.setState('LaCrosse_'+ array[0].usid +'.humid', {val: (parseInt(tmpp[4]) & 0x7f), ack: true});
-                    //absolute Feuchte und Taupunkt
-                    var temp = ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10);
-                    var rel = (parseInt(tmpp[4]) & 0x7f);
-                    var vappress =rel/100 * 6.1078 * Math.exp(((7.5*temp)/(237.3+temp))/Math.LOG10E);
-                    var v = Math.log(vappress/6.1078) * Math.LOG10E;
-                    var dewp = (237.3 * v) / (7.5 - v);
-                    var habs = 1000 * 18.016 / 8314.3 * 100*vappress/(273.15 + temp );
-                    adapter.setState('LaCrosse_'+ array[0].usid +'.abshumid',   {val: round(habs, 1), ack: true});
-                    adapter.setState('LaCrosse_'+ array[0].usid +'.dewpoint',   {val: round(dewp, 1), ack: true});
+                    if (parseInt(tmpp[4]) != 106) {
+                        adapter.setState('LaCrosse_'+ array[0].usid +'.humid', {val: (parseInt(tmpp[4]) & 0x7f), ack: true});
+                        //absolute Feuchte und Taupunkt
+                        var temp = ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10);
+                        var rel = (parseInt(tmpp[4]) & 0x7f);
+                        var vappress =rel/100 * 6.1078 * Math.exp(((7.5*temp)/(237.3+temp))/Math.LOG10E);
+                        var v = Math.log(vappress/6.1078) * Math.LOG10E;
+                        var dewp = (237.3 * v) / (7.5 - v);
+                        var habs = 1000 * 18.016 / 8314.3 * 100*vappress/(273.15 + temp );
+                        adapter.setState('LaCrosse_'+ array[0].usid +'.abshumid',   {val: round(habs, 1), ack: true});
+                        adapter.setState('LaCrosse_'+ array[0].usid +'.dewpoint',   {val: round(dewp, 1), ack: true});
+                    }
                 }
                 else if (array[0].stype ===  'LaCrosseDTT') {
                     // write temperature values for LaCrosseDTT sensors
