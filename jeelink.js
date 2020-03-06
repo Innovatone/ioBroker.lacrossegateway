@@ -1606,38 +1606,39 @@ function main() {
 	    //const parser = sp.pipe(new Readline({ delimiter: '\r\n' }));
 		//const parser = new Readline({ delimiter: '\r\n' });
         //sp.pipe(parser);
+            client.setEncoding('utf-8');
             client.on('data', function(data) {
-                var data1 = data.toString();
-                adapter.log.info('data received: ' + data1) ;
-		        console.log('recv data = '+ data1) ;
-               // if ( data.startsWith('H0')){
-               //     logHMS100TF(data);
-               // }
-               // else {
-                var tmp = data1.split(' ');
+                //var data1 = data.toString();
+                adapter.log.info('data received: ' + data) ;
+		        console.log('recv data = '+ data) ;
+                if ( data.startsWith('H0')){
+                    logHMS100TF(data);
+                }
+                else {
+                    var tmp = data.split(' ');
                     if(tmp[0]==='OK'){
                         if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
-                            logLaCrosseDTH(data1);
+                            logLaCrosseDTH(data);
                             }
 	                    else if (tmp[1]=== '22'){ //22 ist fix für EC3000
-                            logEC3000(data1);
+                            logEC3000(data);
                             }
                         else if (tmp[1]=== 'EMT7110'){ // EMT7110 ist fix für EMT7110
-                            logEMT7110(data1);
+                            logEMT7110(data);
                             }
 			            else if (tmp[1]=== 'LS'){ // LS fix für level
-                            logLevel(data1);
+                            logLevel(data);
                             }
                         else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
-                            logLaCrosseBMP180(data1);
-                            logLaCrosseWS(data1);
+                            logLaCrosseBMP180(data);
+                            logLaCrosseWS(data);
                             }
                         else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
-                    logemonTH(data1);
-                    logemonWater(data1);
+                    logemonTH(data);
+                    logemonWater(data);
                     }
                 }
-               // }
+            }
             });
 	    if (adapter.config.command_en) {
                 setTimeout(write_cmd(adapter.config.command) , 1500); //1,5s Verzögerung
