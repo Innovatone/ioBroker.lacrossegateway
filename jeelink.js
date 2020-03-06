@@ -1604,35 +1604,35 @@ function main() {
 	    //const parser = sp.pipe(new Readline({ delimiter: '\r\n' }));
 		//const parser = new Readline({ delimiter: '\r\n' });
         //sp.pipe(parser);
-            client.on('data', function(data.toString()) {
-                //data1 = data.toString();
-                adapter.log.info('data received: ' + data) ;
-		        console.log('recv data = '+ data) ;
+            client.on('data', function(data) {
+                var data1 = data.toString();
+                adapter.log.info('data received: ' + data1) ;
+		        console.log('recv data = '+ data1) ;
                // if ( data.startsWith('H0')){
                //     logHMS100TF(data);
                // }
                // else {
-                var tmp = data.split(' ');
+                var tmp = data1.split(' ');
                     if(tmp[0]==='OK'){
                         if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
-                            logLaCrosseDTH(data);
+                            logLaCrosseDTH(data1);
                             }
 	                    else if (tmp[1]=== '22'){ //22 ist fix für EC3000
-                            logEC3000(data);
+                            logEC3000(data1);
                             }
                         else if (tmp[1]=== 'EMT7110'){ // EMT7110 ist fix für EMT7110
-                            logEMT7110(data);
+                            logEMT7110(data1);
                             }
 			            else if (tmp[1]=== 'LS'){ // LS fix für level
-                            logLevel(data);
+                            logLevel(data1);
                             }
                         else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
-                            logLaCrosseBMP180(data);
-                            logLaCrosseWS(data);
+                            logLaCrosseBMP180(data1);
+                            logLaCrosseWS(data1);
                             }
                         else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
-                    logemonTH(data);
-                    logemonWater(data);
+                    logemonTH(data1);
+                    logemonWater(data1);
                     }
                 }
                // }
