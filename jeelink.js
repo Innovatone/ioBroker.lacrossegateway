@@ -1593,7 +1593,8 @@ function main() {
 	adapter.log.debug('configured IP address : ' + adapter.config.ipaddress );
 	adapter.log.debug('configured IP port : ' + adapter.config.ipport );
 	adapter.log.debug('options : ' + JSON.stringify(options) );	
-    	const client = new TcpClient.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
+    	//const client = new net.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
+        const client = new net.Socket(8183, '192.168.2.206', function (error) {
         if ( error ) {
             adapter.log.info('failed to open: '+error);
 		console.log('usb open error'+error);
