@@ -1608,7 +1608,7 @@ function main() {
             client.setEncoding('utf-8');
             client.on('data', function(data) {
                 //var data1 = data.toString();
-                adapter.log.info('data received: ' + data) ;
+                adapter.log.debug('data received: ' + data) ;
 		        console.log('recv data = '+ data) ;
                 if ( data.startsWith('H0')){
                     logHMS100TF(data);
