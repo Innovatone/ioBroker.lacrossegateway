@@ -55,9 +55,9 @@
     "es": "identificación única del sensor",
     "pl": "unikalny identyfikator czujnika"
   },
-  "jeelink USB adapter settings": {
-    "en": "jeelink USB adapter settings",
-    "de": "Jeelink USB-Adaptereinstellungen",
+  "jeelink TCP adapter settings": {
+    "en": "jeelink TCP adapter settings",
+    "de": "Jeelink TCP-Adaptereinstellungen",
     "ru": "Настройки адаптера USB-устройства jeelink",
     "pt": "Configurações do adaptador USB do jeelink",
     "nl": "jeelink USB-adapterinstellingen",
@@ -77,9 +77,9 @@
     "es": "tipos de sensor válidos:",
     "pl": "prawidłowe typy czujników:"
   },
-  "serialport": {
-    "en": "serialport",
-    "de": "serielle Schnittstelle",
+  "ipaddress": {
+    "en": "ip address",
+    "de": "IP Adresse",
     "ru": "Серийный порт",
     "pt": "porta serial",
     "nl": "seriele poort",
@@ -88,9 +88,9 @@
     "es": "Puerto serial",
     "pl": "Port szeregowy"
   },
-  "baudrate": {
-    "en": "baudrate",
-    "de": "Baudrate",
+  "ipport": {
+    "en": "ip port",
+    "de": "IP Port",
     "ru": "бод",
     "pt": "taxa de transmissão",
     "nl": "baudrate",

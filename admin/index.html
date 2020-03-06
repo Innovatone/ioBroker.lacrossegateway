@@ -58,14 +58,14 @@
             "de": "verfügbare Sensortypen:",   
             "ru": "valid sensor types:"
             },
-        "serialport":{
-            "en": "serial port",
-            "de": "USB port",                       
+        "ipaddress":{
+            "en": "IP address",
+            "de": "IP Adresse",                       
             "ru": "USB port"
             },
-        "baudrate":{
-            "en": "baudrate",                       
-            "de": "Baudrate",                       
+        "ipport":{
+            "en": "IP port",                       
+            "de": "IP Port",                       
             "ru": "baudrate"
             },
         "Sensor configuration":     {
@@ -190,15 +190,15 @@
         </tr>
     </table>
     
-    <h4 class="translate">jeelink USB adapter settings</h4>
+    <h4 class="translate">jeelink TCP adapter settings</h4>
     <table>
         <tr>
-            <td class="translate">Serial port</td>
-            <td><input id="serialport" class="value"/></td><td><p>/dev/ttyUSB0 or /dev/ttyACME0</p></td>
+            <td class="translate">IP Address</td>
+            <td><input id="ipaddress" class="value"/></td><td><p>192.168.2.206</p></td>
         </tr>
         <tr>
-            <td class="translate">Baud rate</td>
-            <td><input id="baudrate"   class="value number" size="5"/></td> <td><p>usually  57600</p></td>
+            <td class="translate">IP Port</td>
+            <td><input id="ipport"   class="value number" size="4"/></td> <td><p>usually  8183</p></td>
         </tr>
         <tr>
             <td class="translate">command for stick setup</td>

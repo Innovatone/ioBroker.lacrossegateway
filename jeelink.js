@@ -2,9 +2,10 @@
 /*jslint node: true */
 "use strict";
 
-const SerialPort = require("serialport");
-const Readline = SerialPort.parsers.Readline;
-var sp = null;
+//const SerialPort = require("serialport");
+//const Readline = SerialPort.parsers.Readline;
+const TcpClient = require("net");
+var client = null;
 
 // you have to require the utils module and call adapter function
 const utils =  require('@iobroker/adapter-core'); // Get common adapter utils
@@ -1587,21 +1588,21 @@ function main() {
     }
 
     var options = {
-        baudRate:   parseInt(adapter.config.baudrate)   || parseInt(57600)
+        clientPort:   parseInt(adapter.config.ipport)
     };
-	adapter.log.debug('configured port : ' + adapter.config.serialport );
-	adapter.log.debug('configured baudrate : ' + adapter.config.baudrate );
+	adapter.log.debug('configured IP address : ' + adapter.config.ipaddress );
+	adapter.log.debug('configured IP port : ' + adapter.config.ipport );
 	adapter.log.debug('options : ' + JSON.stringify(options) );	
-    	const sp = new SerialPort(adapter.config.serialport || '/dev/ttyUSB0', options, function (error) {
+    	const client = new TcpClient.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
         if ( error ) {
             adapter.log.info('failed to open: '+error);
 		console.log('usb open error'+error);
         } else {
             adapter.log.info('open');
-	    const parser = sp.pipe(new Readline({ delimiter: '\r\n' }));
+	    //const parser = sp.pipe(new Readline({ delimiter: '\r\n' }));
 		//const parser = new Readline({ delimiter: '\r\n' });
 		//sp.pipe(parser);
-            parser.on('data', function(data) {
+            client.on('data', function(data) {
 
                 adapter.log.info('data received: ' + data);
 		console.log('recv data = '+ data);
