@@ -1603,15 +1603,16 @@ function main() {
             adapter.log.info('open');
 	    //const parser = sp.pipe(new Readline({ delimiter: '\r\n' }));
 		//const parser = new Readline({ delimiter: '\r\n' });
-		//sp.pipe(parser);
+        //sp.pipe(parser);
+            client.socket.setEncoding
             client.on('data', function(data) {
 
                 adapter.log.info('data received: ' + data);
 		console.log('recv data = '+ data);
-                if ( data.startsWith('H0')){
-                    logHMS100TF(data);
-                }
-                else {
+               // if ( data.startsWith('H0')){
+               //     logHMS100TF(data);
+               // }
+               // else {
                     var tmp = data.split(' ');
                     if(tmp[0]==='OK'){
                         if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
@@ -1635,7 +1636,7 @@ function main() {
                                 logemonWater(data);
                         }
                     }
-                }
+               // }
 
 
             });
