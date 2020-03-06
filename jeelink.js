@@ -1595,16 +1595,14 @@ function main() {
 	adapter.log.debug('configured IP port : ' + adapter.config.ipport );
     adapter.log.debug('options : ' + JSON.stringify(options) );	
     const client = new TcpClient.Socket();
+    const client1 = new TcpClient.Socket();
     	//const client = new net.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
-        client.connect(adapter.config.ipport, adapter.config.ipaddress, function (error) {
+    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (error) {
         if ( error ) {
             adapter.log.info('failed to open: '+error);
 		console.log('usb open error'+error);
         } else {
             adapter.log.info('open');
-	    //const parser = sp.pipe(new Readline({ delimiter: '\r\n' }));
-		//const parser = new Readline({ delimiter: '\r\n' });
-        //sp.pipe(parser);
             client.setEncoding('utf-8');
             client.on('data', function(data) {
                 //var data1 = data.toString();
@@ -1633,11 +1631,55 @@ function main() {
                             logLaCrosseWS(data);
                             }
                         else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
-                    logemonTH(data);
-                    logemonWater(data);
+                            logemonTH(data);
+                            logemonWater(data);
+                        }
                     }
                 }
+            });
+            if (adapter.config.command_en) {
+                setTimeout(write_cmd(adapter.config.command), 1500); //1,5s Verzögerung
             }
+        }
+    });
+    client1.connect(8183, '192.168.2.207', function (error) {
+        if (error) {
+            adapter.log.info('failed to open: ' + error);
+            console.log('usb open error' + error);
+        } else {
+            adapter.log.info('open');
+            client1.setEncoding('utf-8');
+            client1.on('data', function (data) {
+                adapter.log.debug('data received: ' + data);
+                console.log('recv data = ' + data);
+                if (data.startsWith('H0')) {
+                    logHMS100TF(data);
+                }
+                else {
+                    var tmp = data.split(' ');
+                    if (tmp[0] === 'OK') {
+                        if (tmp[1] === '9') { // 9 ist fix für LaCrosse
+                            logLaCrosseDTH(data);
+                        }
+                        else if (tmp[1] === '22') { //22 ist fix für EC3000
+                            logEC3000(data);
+                        }
+                        else if (tmp[1] === 'EMT7110') { // EMT7110 ist fix für EMT7110
+                            logEMT7110(data);
+                        }
+                        else if (tmp[1] === 'LS') { // LS fix für level
+                            logLevel(data);
+                        }
+                        else if (tmp[1] === 'WS') { //derzeitig fix für superjee, noch auf beide geschickt :-(
+                            logLaCrosseBMP180(data);
+                            logLaCrosseWS(data);
+                        }
+                        else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
+                            logemonTH(data);
+                            logemonWater(data);
+                        }
+                    }
+                }
             });
 	    if (adapter.config.command_en) {
                 setTimeout(write_cmd(adapter.config.command) , 1500); //1,5s Verzögerung
