@@ -1633,9 +1633,7 @@ function main() {
                             logemonTH(data);
                             logemonWater(data);
                         }
-                    } else {
-                        adapter.log.info('0 - data received: ' + tmp[0]);
-                    }
+                    } 
                 }
             });
             if (adapter.config.command_en) {
@@ -1680,9 +1678,7 @@ function main() {
                             logemonTH(data);
                             logemonWater(data);
                         }
-                    } else {
-                        adapter.log.info('1 - data received: ' + tmp[0]);
-                    }
+                    } 
                 }
             });
 	    if (adapter.config.command_en) {
