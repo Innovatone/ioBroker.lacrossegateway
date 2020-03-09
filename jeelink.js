@@ -1634,7 +1634,7 @@ function main() {
                             logemonWater(data);
                         }
                     };
-                    adapater.log.info('0 - unhandled data received: ' + data);  
+                    adapter.log.info('0 - unhandled data received: ' + data);  
                 }
             });
             if (adapter.config.command_en) {
@@ -1679,8 +1679,8 @@ function main() {
                             logemonTH(data);
                             logemonWater(data);
                         }
-                    };
-                    adapater.log.info('1 - unhandled data received: ' + data); 
+                    }
+                    adapter.log.info('1 - unhandled data received: ' + data); 
                 }
             });
 	    if (adapter.config.command_en) {
