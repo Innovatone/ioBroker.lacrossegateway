@@ -1601,7 +1601,7 @@ function main() {
             adapter.log.info('failed to open: '+error);
 		console.log('usb open error'+error);
         } else {
-            adapter.log.info('open');
+            adapter.log.info('open: ' + adapter.config.ipaddress + adapter.config.ipport);
             client.setEncoding('utf-8');
             client.on('data', function(data) {
                 //var data1 = data.toString();
@@ -1647,7 +1647,7 @@ function main() {
             adapter.log.info('failed to open: ' + error);
             console.log('usb open error' + error);
         } else {
-            adapter.log.info('open');
+            adapter.log.info('open: ' + adapter.config.ipaddress + adapter.config.ipport);
             client1.setEncoding('utf-8');
             client1.on('data', function (data) {
                 adapter.log.debug('1 - data received: ' + data);
