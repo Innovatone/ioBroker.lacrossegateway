@@ -1655,6 +1655,9 @@ function main() {
                 if (data.startsWith('H0')) {
                     logHMS100TF(data);
                 }
+                else if (data.startsWith('[LaCrosse')) {
+                    console.log('open message = ' + data);
+                }
                 else {
                     var tmp = data.split(' ');
                     if (tmp[0] === 'OK') {
