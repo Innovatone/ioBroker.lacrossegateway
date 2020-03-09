@@ -1633,6 +1633,8 @@ function main() {
                             logemonTH(data);
                             logemonWater(data);
                         }
+                    } else {
+                        adapter.log.info('1 - data received: ' + data);
                     }
                 }
             });
@@ -1654,9 +1656,6 @@ function main() {
                 console.log('recv data = ' + data);
                 if (data.startsWith('H0')) {
                     logHMS100TF(data);
-                }
-                else if (data.startsWith('[LaCrosse')) {
-                    console.log('open message = ' + data);
                 }
                 else {
                     var tmp = data.split(' ');
@@ -1681,6 +1680,8 @@ function main() {
                             logemonTH(data);
                             logemonWater(data);
                         }
+                    } else {
+                        adapter.log.info('1 - data received: ' + data);
                     }
                 }
             });
