@@ -1601,7 +1601,7 @@ function main() {
             adapter.log.info('failed to open: '+error);
 		console.log('usb open error'+error);
         } else {
-            adapter.log.info('open: ' + adapter.config.ipaddress + adapter.config.ipport);
+            adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
             client.setEncoding('utf-8');
             client.on('data', function(data) {
                 //var data1 = data.toString();
@@ -1633,7 +1633,8 @@ function main() {
                             logemonTH(data);
                             logemonWater(data);
                         }
-                    } 
+                    };
+                    adapater.log.info('0 - unhandled data received: ' + data);  
                 }
             });
             if (adapter.config.command_en) {
@@ -1647,7 +1648,7 @@ function main() {
             adapter.log.info('failed to open: ' + error);
             console.log('usb open error' + error);
         } else {
-            adapter.log.info('open: ' + adapter.config.ipaddress + adapter.config.ipport);
+            adapter.log.info('open: 192.168.2.207:1883');
             client1.setEncoding('utf-8');
             client1.on('data', function (data) {
                 adapter.log.debug('1 - data received: ' + data);
@@ -1678,7 +1679,8 @@ function main() {
                             logemonTH(data);
                             logemonWater(data);
                         }
-                    } 
+                    };
+                    adapater.log.info('1 - unhandled data received: ' + data); 
                 }
             });
 	    if (adapter.config.command_en) {
