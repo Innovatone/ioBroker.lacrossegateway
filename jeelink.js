@@ -1634,7 +1634,7 @@ function main() {
                             logemonWater(data);
                         }
                     } else {
-                        adapter.log.info('0 - data received: ' + tmp[0];
+                        adapter.log.info('0 - data received: ' + tmp[0]);
                     }
                 }
             });
