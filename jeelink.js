@@ -70,19 +70,17 @@ function round(value, digits) //digits 1 for 1 digit after comma
 	return value/factor;
 }
 
-function defineLaCrosseGW(id) {
-    adapter.setObjectNotExists('LaCrosseGW__' + id, {
+function defineLaCrosseGW() {
+    adapter.setObjectNotExists('LaCrosseGW', {
         type: 'channel',
         common: {
             name: 'LaCrosseGW ' + id,
             role: 'gateway'
         },
-        native: {
-            "addr": id
-        }
+        native: {}
     });
-    adapter.log.info('RFM12B setting up object = LaCrosseGW' + id);
-    adapter.setObjectNotExists('LaCrosseGW_' + id + '.uptimeseconds', {
+    adapter.log.info('RFM12B setting up object = LaCrosseGW');
+    adapter.setObjectNotExists('LaCrosseGW.uptimeseconds', {
         type: 'state',
         common: {
             "name": "Uptime seconds",
