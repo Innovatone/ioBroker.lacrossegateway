@@ -70,6 +70,31 @@ function round(value, digits) //digits 1 for 1 digit after comma
 	return value/factor;
 }
 
+function defineLaCrosseGW(id) {
+    adapter.setObjectNotExists('LaCrosseGW__' + id, {
+        type: 'channel',
+        common: {
+            name: 'LaCrosseGW ' + id,
+            role: 'gateway'
+        },
+        native: {
+            "addr": id
+        }
+    });
+    adapter.log.info('RFM12B setting up object = LaCrosseGW' + id);
+    adapter.setObjectNotExists('LaCrosseGW_' + id + '.uptimeseconds', {
+        type: 'state',
+        common: {
+            "name": "Uptime seconds",
+            "type": "text",
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "Uptime Seconds"
+        },
+        native: {}
+    });
+}
 
 // OK 21 XXX XXX XXX XXX XXX
 // |  |  |   |   |   |   |
@@ -1565,6 +1590,8 @@ function main() {
     // adapter.config:
 	adapter.log.debug('start of main');
     var obj = adapter.config.sensors;
+    defineLaCrosseGW(adapter.config.ipaddress, adapter.config.ipport);
+
     for (var anz in obj){
         if(obj[anz].stype=="emonTH") {
             defineemonTH(obj[anz].usid, obj[anz].name );
