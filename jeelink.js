@@ -1630,7 +1630,7 @@ function main() {
                             logLaCrosseWS(data);
                             }
                         else if (tmp[1] === 'VALUES') { //OK Values
-                            adapter.log.info(tmp[2] + ' ' + tmp[3]);
+                            //adapter.log.info(tmp[2] + ' ' + tmp[3]);
                             //logLaCrosseBMP180(data);
                             //logLaCrosseWS(data);
                         }
@@ -1646,6 +1646,7 @@ function main() {
             }
         }
     });
+    /*
     const client1 = new TcpClient.Socket();
     client1.connect(8183, '192.168.2.207', function (error) {
         if (error) {
@@ -1680,7 +1681,7 @@ function main() {
                             logLaCrosseWS(data);
                         }
                         else if (tmp[1] === 'VALUES') { //OK Values
-                            adapter.log.info(tmp[2] + ' ' + tmp[3]);
+                            //adapter.log.info(tmp[2] + ' ' + tmp[3]);
                             //logLaCrosseBMP180(data);
                             //logLaCrosseWS(data);
                         }
@@ -1696,7 +1697,7 @@ function main() {
             }
         }
     });
-
+    */
 
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
