@@ -1682,7 +1682,7 @@ function main() {
                             logLaCrosseWS(data);
                             }
                         else if (tmp[1] === 'VALUES') { //OK Values
-                            adapter.log.info(tmp[2] + ' ' + tmp[3]);
+                            adapter.log.info(tmp);
                             logValue(data);
                             //logLaCrosseBMP180(data);
                             //logLaCrosseWS(data);
