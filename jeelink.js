@@ -1590,7 +1590,7 @@ function main() {
     // adapter.config:
 	adapter.log.debug('start of main');
     var obj = adapter.config.sensors;
-    defineLaCrosseGW(adapter.config.ipaddress, adapter.config.ipport);
+    defineLaCrosseGW('LGW');
 
     for (var anz in obj){
         if(obj[anz].stype=="emonTH") {
