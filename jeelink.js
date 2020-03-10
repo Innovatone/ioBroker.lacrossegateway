@@ -84,7 +84,8 @@ function defineLaCrosseGW() {
         type: 'state',
         common: {
             "name": "Uptime seconds",
-            "type": "text",
+            "type": "number",
+            "unit": "Seconds",
             "read": true,
             "write": false,
             "role": "value",
@@ -1567,8 +1568,9 @@ function logLaCrosseBMP180(data){
 function logValue(data) {
     var tmp = data.split(' ');
     var tmp1 = tmp[4].split(',');
-    adapter.setState('LaCrosseGW.uptimeseconds', { val: (tmp1[0]), ack: true } );
-    adapter.log.info('Value = ' + tmp1[0]);
+    var uptimeseconds = tmp1[0].split('=');
+    adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds), ack: true } );
+    adapter.log.info('Value = ' + uptimeseconds);
 
 }
 
