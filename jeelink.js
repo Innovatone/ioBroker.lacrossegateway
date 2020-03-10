@@ -74,7 +74,7 @@ function defineLaCrosseGW() {
     adapter.setObjectNotExists('LaCrosseGW', {
         type: 'channel',
         common: {
-            name: 'LaCrosseGW ' + id,
+            name: 'LaCrosseGW ',
             role: 'gateway'
         },
         native: {}
@@ -1567,7 +1567,7 @@ function logLaCrosseBMP180(data){
 function logValue(data) {
     var tmp = data.split(' ');
     var tmp1 = tmp[4].split(',');
-    adapter.setState('LaCrosseGW_UpTimeSeconds', { val: (tmp1[0]), ack: true } );
+    adapter.setState('LaCrosseGW.uptimeseconds', { val: (tmp1[0]), ack: true } );
     adapter.log.info('Value = ' + tmp1[0]);
 
 }
@@ -1588,7 +1588,7 @@ function main() {
     // adapter.config:
 	adapter.log.debug('start of main');
     var obj = adapter.config.sensors;
-    defineLaCrosseGW('LGW');
+    defineLaCrosseGW();
 
     for (var anz in obj){
         if(obj[anz].stype=="emonTH") {
