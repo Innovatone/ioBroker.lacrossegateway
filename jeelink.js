@@ -1591,19 +1591,23 @@ function main() {
     var options = {
         clientPort:   parseInt(adapter.config.ipport)
     };
+    
 	adapter.log.debug('configured IP address : ' + adapter.config.ipaddress );
 	adapter.log.debug('configured IP port : ' + adapter.config.ipport );
-    adapter.log.debug('options : ' + JSON.stringify(options) );	
+    //adapter.log.debug('options : ' + JSON.stringify(options) );	
     const client = new TcpClient.Socket();
     	//const client = new net.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
-    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (error) {
-        if ( error ) {
-            adapter.log.info('failed to open: '+error);
-		    console.log('usb open error'+error);
-        } else {
-            adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
-            client.setEncoding('utf-8');
-            client.on('data', function(data) {
+    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+        adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+        client.setEncoding('utf-8');
+    });
+
+    client.on('error',function(error){
+        adapter.log.info('failed to open: ' + error);
+        console.log('usb open error' + error);
+    });
+    
+    client.on('data', function(data) {
                 //var data1 = data.toString();
                 adapter.log.debug(' 0 - data received: ' + data) ;
 		        console.log('recv data = '+ data) ;
@@ -1640,12 +1644,12 @@ function main() {
                         }
                     } 
                 }
-            });
-            if (adapter.config.command_en) {
-                setTimeout(write_cmd(adapter.config.command), 1500); //1,5s Verzögerung
-            }
-        }
     });
+
+    if (adapter.config.command_en) {
+        setTimeout(write_cmd(adapter.config.command), 1500); //1,5s Verzögerung
+    }
+    
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
 }
