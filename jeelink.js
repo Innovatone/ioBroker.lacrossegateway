@@ -1599,7 +1599,7 @@ function main() {
     client.connect(adapter.config.ipport, adapter.config.ipaddress, function (error) {
         if ( error ) {
             adapter.log.info('failed to open: '+error);
-		console.log('usb open error'+error);
+		    console.log('usb open error'+error);
         } else {
             adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
             client.setEncoding('utf-8');
@@ -1630,7 +1630,7 @@ function main() {
                             logLaCrosseWS(data);
                             }
                         else if (tmp[1] === 'VALUES') { //OK Values
-                            //adapter.log.info(tmp[2] + ' ' + tmp[3]);
+                            adapter.log.info(tmp[2] + ' ' + tmp[3]);
                             //logLaCrosseBMP180(data);
                             //logLaCrosseWS(data);
                         }
@@ -1646,63 +1646,8 @@ function main() {
             }
         }
     });
-    /*
-    const client1 = new TcpClient.Socket();
-    client1.connect(8183, '192.168.2.207', function (error) {
-        if (error) {
-            adapter.log.info('failed to open: ' + error);
-            console.log('usb open error' + error);
-        } else {
-            adapter.log.info('open: 192.168.2.207:1883');
-            client1.setEncoding('utf-8');
-            client1.on('data', function (data) {
-                adapter.log.debug('1 - data received: ' + data);
-                console.log('recv data = ' + data);
-                if (data.startsWith('H0')) {
-                    logHMS100TF(data);
-                }
-                else {
-                    var tmp = data.split(' ');
-                    if (tmp[0] === 'OK') {
-                        if (tmp[1] === '9') { // 9 ist fix für LaCrosse
-                            logLaCrosseDTH(data);
-                        }
-                        else if (tmp[1] === '22') { //22 ist fix für EC3000
-                            logEC3000(data);
-                        }
-                        else if (tmp[1] === 'EMT7110') { // EMT7110 ist fix für EMT7110
-                            logEMT7110(data);
-                        }
-                        else if (tmp[1] === 'LS') { // LS fix für level
-                            logLevel(data);
-                        }
-                        else if (tmp[1] === 'WS') { //derzeitig fix für superjee, noch auf beide geschickt :-(
-                            logLaCrosseBMP180(data);
-                            logLaCrosseWS(data);
-                        }
-                        else if (tmp[1] === 'VALUES') { //OK Values
-                            //adapter.log.info(tmp[2] + ' ' + tmp[3]);
-                            //logLaCrosseBMP180(data);
-                            //logLaCrosseWS(data);
-                        }
-                        else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
-                            logemonTH(data);
-                            logemonWater(data);
-                        }
-                    }
-                }
-            });
-	    if (adapter.config.command_en) {
-                setTimeout(write_cmd(adapter.config.command) , 1500); //1,5s Verzögerung
-            }
-        }
-    });
-    */
-
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
-
-
 }
 
 // If started as allInOne/compact mode => return function to create instance
