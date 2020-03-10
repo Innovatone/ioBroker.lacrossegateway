@@ -1682,10 +1682,8 @@ function main() {
                             logLaCrosseWS(data);
                             }
                         else if (tmp[1] === 'VALUES') { //OK Values
-                            adapter.log.info(tmp);
+                            adapter.log.debug(tmp);
                             logValue(data);
-                            //logLaCrosseBMP180(data);
-                            //logLaCrosseWS(data);
                         }
                         else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
                             logemonTH(data);
