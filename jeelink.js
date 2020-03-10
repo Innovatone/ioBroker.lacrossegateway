@@ -1542,7 +1542,7 @@ function logLaCrosseBMP180(data){
 }
 
 function logValue(data) {
-    var tmp = data.splitt(' ');
+    var tmp = data.split(' ');
     var tmp1 = tmp[4].split(',');
     adapter.setState('LaCrosseGW_UpTimeSeconds', { val: (tmp1[0]), ack: true } );
 
