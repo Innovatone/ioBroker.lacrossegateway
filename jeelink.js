@@ -1541,6 +1541,12 @@ function logLaCrosseBMP180(data){
     }
 }
 
+function logValue(data) {
+    var tmp = data.splitt(' ');
+    var tmp1 = tmp[4].split(',');
+    adapter.setState('LaCrosseGW_UpTimeSeconds', { val: (tmp1[0]), ack: true } );
+
+}
 
 function write_cmd(command){
 
@@ -1591,7 +1597,7 @@ function main() {
     var options = {
         clientPort:   parseInt(adapter.config.ipport)
     };
-    
+
 	adapter.log.debug('configured IP address : ' + adapter.config.ipaddress );
 	adapter.log.debug('configured IP port : ' + adapter.config.ipport );
     //adapter.log.debug('options : ' + JSON.stringify(options) );	
@@ -1634,7 +1640,8 @@ function main() {
                             logLaCrosseWS(data);
                             }
                         else if (tmp[1] === 'VALUES') { //OK Values
-                            adapter.log.info(tmp[2] + ' ' + tmp[3]);
+                            //adapter.log.info(tmp[2] + ' ' + tmp[3]);
+                            logValue(data);
                             //logLaCrosseBMP180(data);
                             //logLaCrosseWS(data);
                         }
