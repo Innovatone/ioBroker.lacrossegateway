@@ -93,6 +93,18 @@ function defineLaCrosseGW() {
         },
         native: {}
     });
+    adapter.setObjectNotExists('LaCrosseGW.uptimetext', {
+        type: 'state',
+        common: {
+            "name": "Uptime",
+            "type": "text",
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "Uptime"
+        },
+        native: {}
+    });
 }
 
 // OK 21 XXX XXX XXX XXX XXX
@@ -1569,8 +1581,10 @@ function logValue(data) {
     var tmp = data.split(' ');
     var tmp1 = tmp[4].split(',');
     var uptimeseconds = tmp1[0].split('=');
-    adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds), ack: true } );
-    adapter.log.info('Value = ' + uptimeseconds);
+    var uptime = tmp1[1].split('=');
+    adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds[1]), ack: true } );
+    adapter.setState('LaCrosseGW.uptimetext', { val: parseInt(uptime[1]), ack: true });
+    adapter.log.info('Value = ' + uptimeseconds[1]);
 
 }
 
