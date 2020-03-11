@@ -1430,6 +1430,21 @@ function defineLaCrosseWS(id, name){
         },
         native: {}
     });
+    adapter.setObjectNotExists('LaCrosse_' + id + '.pressure', {
+        type: 'state',
+        common: {
+            "name": "air pressure",
+            "type": "number",
+            "unit": "hPa",
+            "min": 0,
+            "max": 1200,
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "air pressure"
+        },
+        native: {}
+    });
 }
 
 
@@ -1455,30 +1470,30 @@ function logLaCrosseWS(data){
 		    adapter.log.debug('Temperature   : no data (255)');
 		    } 
 		else {
-                	adapter.log.debug('Temperature   : '+ ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10) ) ; // Vorzeichen fehlt noch
-                	adapter.setState('LaCrosseWS_'+ array[0].usid +'.temp',    {val: ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10), ack: true});
+            adapter.log.debug('Temperature   : '+ ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10) ) ; // Vorzeichen fehlt noch
+            adapter.setState('LaCrosseWS_'+ array[0].usid +'.temp',    {val: ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10), ack: true});
 	    	}
 		if  ((parseInt(tmpp[4])) === 255){
 		    adapter.log.debug('Humidty   : no data (255)');
 		    } 
 		else {
-               		adapter.log.debug('Humidty      : '+ ((parseInt(tmpp[4]))*1) );
+            adapter.log.debug('Humidty      : '+ ((parseInt(tmpp[4]))*1) );
 			adapter.setState('LaCrosseWS_'+ array[0].usid +'.humid',   {val: ((parseInt(tmpp[4])*1)), ack: true});    
 		}
 		if  ((parseInt(tmpp[5])) === 255){
 		    adapter.log.debug('Rain   : no data (255)');
 		    }
 		else {
-                	adapter.log.debug('Rain         : '+ ((((parseInt(tmpp[5]))*256)+(parseInt(tmpp[6])))/2) );
+            adapter.log.debug('Rain         : '+ ((((parseInt(tmpp[5]))*256)+(parseInt(tmpp[6])))/2) );
 			adapter.setState('LaCrosseWS_'+ array[0].usid +'.rain',    {val: ((((parseInt(tmpp[5]))*256)+(parseInt(tmpp[6])))/2), ack: true});
 		    }
 		if  ((parseInt(tmpp[9])) === 255){
 		    adapter.log.debug('Wind Speed   : no data (255)');
 		    }
 		else {		    
-                	adapter.log.debug('WindSpeed    : '+ ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10) );
-	        	adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed',  {val: ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10), ack: true});
-	        	adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed2',  {val: round( ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10)*3.6, 2), ack: true});
+            adapter.log.debug('WindSpeed    : '+ ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10) );
+	        adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed',  {val: ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10), ack: true});
+	        adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed2',  {val: round( ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10)*3.6, 2), ack: true});
 
 		}
 		if  ((parseInt(tmpp[7])) === 255){
@@ -1516,7 +1531,8 @@ function logLaCrosseWS(data){
         }
     }
 }
-// superjee LaCrosse mit BMP180
+
+// superjee LaCrosse mit BME280
 // OK WS 0 2    4  212 255 255 255 255 255 255 255 255 255 0   3   241  ID=0 T:23,6 Druck 1009 hPa
 // OK WS 0 XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
 // |  |  |  |   |   |   |   |   |   |   |   |   |   |   |   |   |   | --- [18] Druck LSB
@@ -1539,7 +1555,7 @@ function logLaCrosseWS(data){
 // |  |------------------------------------------------------------------ [1]fix "WS"
 // |--------------------------------------------------------------------- [0]fix "OK"
 
-function defineLaCrosseBMP180(id, name){    
+function defineLaCrosseBME280(id, name) {
     adapter.setObjectNotExists('LaCrosse_' + id, {
         type: 'channel',
         common: {
@@ -1555,63 +1571,81 @@ function defineLaCrosseBMP180(id, name){
     adapter.setObjectNotExists('LaCrosse_' + id + '.temp', {
         type: 'state',
         common: {
-            "name":     "Temperature",
-            "type":     "number",
-            "unit":     "°C",
-            "min":      -50,
-            "max":      50,
-            "read":     true,
-            "write":    false,
-            "role":     "value.temperature",
-            "desc":     "Temperature"
+            "name": "Temperature",
+            "type": "number",
+            "unit": "°C",
+            "min": -50,
+            "max": 50,
+            "read": true,
+            "write": false,
+            "role": "value.temperature",
+            "desc": "Temperature"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosse_' + id + '.humid', {
+        type: 'state',
+        common: {
+            "name": "Humidity",
+            "type": "number",
+            "unit": "%",
+            "min": 0,
+            "max": 100,
+            "read": true,
+            "write": false,
+            "role": "value.humidity",
+            "desc": "Humidity"
         },
         native: {}
     });
     adapter.setObjectNotExists('LaCrosse_' + id + '.pressure', {
         type: 'state',
         common: {
-            "name":     "air pressure",
-            "type":     "number",
-            "unit":     "hPa",
-            "min":      0,
-            "max":      1200,
-            "read":     true,
-            "write":    false,
-            "role":     "value",
-            "desc":     "air pressure"
+            "name": "air pressure",
+            "type": "number",
+            "unit": "hPa",
+            "min": 0,
+            "max": 1200,
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "air pressure"
         },
         native: {}
     });
 }
 
-function logLaCrosseBMP180(data){
+function logLaCrosseBME280(data) {
     var tmp = data.split(' ');
-    if(tmp[0]==='OK'){                      // Wenn ein Datensatz sauber gelesen wurde
-        if(tmp[1]=='WS'){                    // Für jeden Datensatz mit dem fixen Eintrag WS
+    if (tmp[0] === 'OK') {                      // Wenn ein Datensatz sauber gelesen wurde
+        if (tmp[1] == 'WS') {                    // Für jeden Datensatz mit dem fixen Eintrag WS
             // somit werden alle SenderIDs bearbeitet
-            var tmpp=tmp.splice(2,18);       // es werden die vorderen Blöcke (0,1) entfernt
-            adapter.log.debug('splice       : '+ tmpp);
-            
-            var array=getConfigObjects(adapter.config.sensors, 'sid', parseInt(tmpp[0]));
+            var tmpp = tmp.splice(2, 18);       // es werden die vorderen Blöcke (0,1) entfernt
+            adapter.log.debug('splice       : ' + tmpp);
+
+            var array = getConfigObjects(adapter.config.sensors, 'sid', parseInt(tmpp[0]));
             if (array.length === 0 || array.length !== 1) {
                 adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter or not unique received address');
             }
-            else if (array[0].stype !==  'LaCrosseBMP180'){
+            else if (array[0].stype !== 'LaCrosseBMP180') {
                 adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter as LaCrosseBMP180');
             }
-            else if (array[0].usid != 'nodef'){
-                adapter.log.debug('Sensor ID    : '+ (parseInt(tmpp[0])) );
-                adapter.log.debug('Type         : '+ (parseInt(tmpp[1])) );
-                adapter.log.debug('Temperatur   : '+ ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10) );
-                adapter.log.debug('Pressure      : '+ (((parseInt(tmpp[14]))*256)+(parseInt(tmpp[15]))) );
+            else if (array[0].usid != 'nodef') {
+                adapter.log.debug('Sensor ID    : ' + (parseInt(tmpp[0])));
+                adapter.log.debug('Type         : ' + (parseInt(tmpp[1])));
+                adapter.log.debug('Temperatur   : ' + ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10));
+                adapter.log.debug('Humidty      : ' + ((parseInt(tmpp[4])) * 1));
+                adapter.log.debug('Pressure      : ' + (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))));
                 // Werte schreiben
                 // aus gesendeter ID die unique ID bestimmen
-                adapter.setState('LaCrosse_'+ array[0].usid +'.temp',    {val: ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10), ack: true});
-                adapter.setState('LaCrosse_'+ array[0].usid +'.pressure',   {val: (((parseInt(tmpp[14]))*256)+(parseInt(tmpp[15]))), ack: true});                
+                adapter.setState('LaCrosse_' + array[0].usid + '.humid', { val: ((parseInt(tmpp[4]) * 1)), ack: true }); 
+                adapter.setState('LaCrosse_' + array[0].usid + '.temp', { val: ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10), ack: true });
+                adapter.setState('LaCrosse_' + array[0].usid + '.pressure', { val: (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))), ack: true });
             }
         }
     }
 }
+
 
 function logValue(data) {
     //var tmp = data.split(' ');
