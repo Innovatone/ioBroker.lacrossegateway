@@ -1614,7 +1614,7 @@ function logValue(data) {
     adapter.setState('LaCrosseGW.uptimetext', { val: uptime[1], ack: true });
     adapter.setState('LaCrosseGW.version', { val: version[1], ack: true});
     adapter.setState('LaCrosseGW.mac', { val: mac[1], ack: true });
-    adapter.log.info('Value = ' + uptime[1]);
+    //adapter.log.info('Value = ' + uptime[1]);
 
 }
 
