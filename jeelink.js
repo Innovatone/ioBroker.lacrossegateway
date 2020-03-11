@@ -45,7 +45,7 @@ function startAdapter(options) {
                 adapter.log.debug('ack is not set!');
             };
             if (timer) clearTimeout(timer);
-            timer = setTimeout(function) {
+            timer = setTimeout(function() {
                 adapter.log.error('Verbund zum LGW unterbrochen');
             }, 60000);
         },
