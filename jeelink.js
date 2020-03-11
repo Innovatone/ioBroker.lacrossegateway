@@ -44,17 +44,6 @@ function startAdapter(options) {
             if (state && !state.ack) {
                 adapter.log.debug('ack is not set!');
             };
-            if (timer) clearTimeout(timer);
-            timer = setTimeout(function() {
-                adapter.log.error('Verbund zum LGW unterbrochen');
-                client.end(function(end){
-                    adapter.log.debug('closed...');
-                });
-                client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
-                    adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
-                    client.setEncoding('utf-8');
-                });
-            }, 60000);
         },
         // is called when databases are connected and adapter received configuration.
         // start here!
@@ -1938,7 +1927,19 @@ function main() {
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
 }
-
+adapter.on('stateChange', function (id, state) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(function () {
+        adapter.log.error('Verbund zum LGW unterbrochen');
+        client.end(function (end) {
+            adapter.log.debug('closed...');
+        });
+        client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+            adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+            client.setEncoding('utf-8');
+        });
+}, 60000);
+});
 // If started as allInOne/compact mode => return function to create instance
 if (module && module.parent) {
     module.exports = startAdapter;
