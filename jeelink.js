@@ -1797,6 +1797,9 @@ function main() {
         if(obj[anz].stype=="LaCrosseBMP180"){
             defineLaCrosseBMP180(obj[anz].usid, obj[anz].name);
         }
+        if (obj[anz].stype == "LaCrosseBME280") {
+            defineLaCrosseBME280(obj[anz].usid, obj[anz].name);
+        }
         if(obj[anz].stype=="HMS100TF"){
             defineHMS100TF(obj[anz].usid, obj[anz].name);
         }
@@ -1857,6 +1860,7 @@ function main() {
                             }
                         else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
                             logLaCrosseBMP180(data);
+                            logLaCrosseBME280(data);
                             logLaCrosseWS(data);
                             }
                         else if (tmp[1] === 'VALUES') { //OK Values
