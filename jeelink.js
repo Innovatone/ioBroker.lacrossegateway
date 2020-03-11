@@ -1579,12 +1579,13 @@ function logLaCrosseBMP180(data){
 
 function logValue(data) {
     //var tmp = data.split(' ');
-    var tmp1 = data.split(',');
-    var uptimeseconds = tmp1[0].split('=');
-    var uptime = tmp1[1].split('=');
+    var tmp = data.split(',');
+    adapter.log.info(tmp);
+    var uptimeseconds = tmp[0].split('=');
+    var uptime = tmp[1].split('=');
     adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds[1]), ack: true } );
     adapter.setState('LaCrosseGW.uptimetext', { val: parseInt(uptime[1]), ack: true });
-    adapter.log.info('Value = ' + uptimeseconds[1]);
+    adapter.log.info('Value = ' + uptime[1]);
 
 }
 
