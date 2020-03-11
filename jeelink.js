@@ -1791,15 +1791,15 @@ function logValue(data) {
     let len = tmp.length;
     let i;
     for (i=0; i < len; i++) {
-        if (tmp[i].search(/MacAddress/)) {
+        if (tmp[i].search(/MacAddress/) != -1) {
             var mac = tmp[i].split('=');
             adapter.setState('LaCrosseGW.mac', { val: mac[1], ack: true });
         };
-        if (tmp[i].search(/Version/)) {
+        if (tmp[i].search(/Version/) != -1) {
             var version = tmp[i].split('=');
             adapter.setState('LaCrosseGW.version', { val: version[1], ack: true });
         };
-        if (tmp[i].search(/RSSI/)) {
+        if (tmp[i].search(/RSSI/) != -1) {
             var rssi = tmp[i].split('=');
             adapter.setState('LaCrosseGW.rssi', { val: rssi[1], ack: true });
         };
