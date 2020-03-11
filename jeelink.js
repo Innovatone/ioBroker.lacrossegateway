@@ -1627,8 +1627,8 @@ function logLaCrosseBME280(data) {
             if (array.length === 0 || array.length !== 1) {
                 adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter or not unique received address');
             }
-            else if (array[0].stype !== 'LaCrosseBMP180') {
-                adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter as LaCrosseBMP180');
+            else if (array[0].stype !== 'LaCrosseBME280') {
+                adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter as LaCrosseBME280');
             }
             else if (array[0].usid != 'nodef') {
                 adapter.log.debug('Sensor ID    : ' + (parseInt(tmpp[0])));
