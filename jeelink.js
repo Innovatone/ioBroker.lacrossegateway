@@ -1605,7 +1605,7 @@ function logLaCrosseBMP180(data){
 function logValue(data) {
     //var tmp = data.split(' ');
     var tmp = data.split(',');
-    adapter.log.info(tmp);
+    adapter.log.debug('logValue: ' + tmp);
     var uptimeseconds = tmp[0].split('=');
     var uptime = tmp[1].split('=');
     var version = tmp[8].split('=');
