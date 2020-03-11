@@ -7,6 +7,8 @@
 const TcpClient = require("net");
 var client = null;
 
+var timer = null;
+
 // you have to require the utils module and call adapter function
 const utils =  require('@iobroker/adapter-core'); // Get common adapter utils
 
@@ -41,7 +43,11 @@ function startAdapter(options) {
             // you can use the ack flag to detect if it is status (true) or command (false)
             if (state && !state.ack) {
                 adapter.log.debug('ack is not set!');
-            }
+            };
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(function) {
+                adapter.log.error('Verbund zum LGW unterbrochen');
+            }, 60000);
         },
         // is called when databases are connected and adapter received configuration.
         // start here!
@@ -1785,7 +1791,6 @@ function logLaCrosseBMP180(data) {
 
 
 function logValue(data) {
-    //var tmp = data.split(' ');
     var tmp = data.split(',');
     adapter.log.debug('logValue: ' + tmp);
     let len = tmp.length;
@@ -1806,16 +1811,8 @@ function logValue(data) {
     };
     var uptimeseconds = tmp[0].split('=');
     var uptime = tmp[1].split('=');
-    //var version = tmp[8].split('=');
-    //var mac = tmp[3].split('=');
-    //var rssi = tmp[6].split('=');
     adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds[1]), ack: true } );
     adapter.setState('LaCrosseGW.uptimetext', { val: uptime[1], ack: true });
-    //adapter.setState('LaCrosseGW.version', { val: version[1], ack: true});
-    //adapter.setState('LaCrosseGW.mac', { val: mac[1], ack: true });
-    //adapter.setState('LaCrosseGW.rssi', { val: parseInt(rssi[1]), ack: true });
-    //adapter.log.info('Value = ' + uptime[1]);
-
 }
 
 function write_cmd(command){
