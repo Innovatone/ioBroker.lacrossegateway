@@ -105,6 +105,31 @@ function defineLaCrosseGW() {
         },
         native: {}
     });
+    adapter.setObjectNotExists('LaCrosseGW.version', {
+        type: 'state',
+        common: {
+            "name": "Version",
+            "type": "text",
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "Version"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosseGW.mac', {
+        type: 'state',
+        common: {
+            "name": "MAC",
+            "type": "text",
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "MAC"
+        },
+        native: {}
+    });
+    
 }
 
 // OK 21 XXX XXX XXX XXX XXX
@@ -1583,8 +1608,12 @@ function logValue(data) {
     adapter.log.info(tmp);
     var uptimeseconds = tmp[0].split('=');
     var uptime = tmp[1].split('=');
+    var version = tmp[8].split('=');
+    var mac = tmp[3].split('=');
     adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds[1]), ack: true } );
     adapter.setState('LaCrosseGW.uptimetext', { val: uptime[1], ack: true });
+    adapter.setState('LaCrosseGW.version', { val: version[1], ack: true});
+    adapter.setState('LaCrosseGW.mac', { val: mac[1], ack: true });
     adapter.log.info('Value = ' + uptime[1]);
 
 }
