@@ -1638,7 +1638,108 @@ function logLaCrosseBME280(data) {
                 adapter.log.debug('Pressure      : ' + (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))));
                 // Werte schreiben
                 // aus gesendeter ID die unique ID bestimmen
-                adapter.setState('LaCrosse_' + array[0].usid + '.humid', { val: ((parseInt(tmpp[4]) * 1)), ack: true }); 
+                adapter.setState('LaCrosse_' + array[0].usid + '.humid', { val: (parseInt(tmpp[4]) * 1), ack: true }); 
+                adapter.setState('LaCrosse_' + array[0].usid + '.temp', { val: ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10), ack: true });
+                adapter.setState('LaCrosse_' + array[0].usid + '.pressure', { val: (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))), ack: true });
+            }
+        }
+    }
+}
+
+// superjee LaCrosse mit BMP180
+// OK WS 0 2    4  212 255 255 255 255 255 255 255 255 255 0   3   241  ID=0 T:23,6 Druck 1009 hPa
+// OK WS 0 XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |   |   |   |   | --- [18] Druck LSB
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |   |   |   |-------- [17] Druck MSB
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |   |   |------------ [16] Flags ?
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |   | --------------- [15]
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |-------------------- [14]
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |-------------------- [13]
+// |  |  |  |   |   |   |   |   |   |   |   |   |------------------------ [12]
+// |  |  |  |   |   |   |   |   |   |   |   |---------------------------- [11]
+// |  |  |  |   |   |   |   |   |   |   |-------------------------------- [10]
+// |  |  |  |   |   |   |   |   |   |------------------------------------ [9]
+// |  |  |  |   |   |   |   |   |---------------------------------------- [8]
+// |  |  |  |   |   |   |   |-------------------------------------------- [7]
+// |  |  |  |   |   |   |------------------------------------------------ [6]
+// |  |  |  |   |   |---------------------------------------------------- [5]Temp * 10 + 1000 LSB
+// |  |  |  |   |-------------------------------------------------------- [4]Temp * 10 + 1000 MSB
+// |  |  |  |------------------------------------------------------------ [3]Sensor type 2 fix
+// |  |  |--------------------------------------------------------------- [2]Sensor ID=0 fix
+// |  |------------------------------------------------------------------ [1]fix "WS"
+// |--------------------------------------------------------------------- [0]fix "OK"
+
+function defineLaCrosseBMP180(id, name) {
+    adapter.setObjectNotExists('LaCrosse_' + id, {
+        type: 'channel',
+        common: {
+            name: name,
+            role: 'sensor'
+        },
+        native: {
+            "addr": id
+        }
+    });
+    adapter.log.info('RFM12B setting up object = LaCrosse ' + id);
+
+    adapter.setObjectNotExists('LaCrosse_' + id + '.temp', {
+        type: 'state',
+        common: {
+            "name": "Temperature",
+            "type": "number",
+            "unit": "°C",
+            "min": -50,
+            "max": 50,
+            "read": true,
+            "write": false,
+            "role": "value.temperature",
+            "desc": "Temperature"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosse_' + id + '.pressure', {
+        type: 'state',
+        common: {
+            "name": "air pressure",
+            "type": "number",
+            "unit": "hPa",
+            "min": 0,
+            "max": 1200,
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "air pressure"
+        },
+        native: {}
+    });
+}
+
+
+
+function logLaCrosseBMP180(data) {
+    var tmp = data.split(' ');
+    if (tmp[0] === 'OK') {                      // Wenn ein Datensatz sauber gelesen wurde
+        if (tmp[1] == 'WS') {                    // Für jeden Datensatz mit dem fixen Eintrag WS
+            // somit werden alle SenderIDs bearbeitet
+            var tmpp = tmp.splice(2, 18);       // es werden die vorderen Blöcke (0,1) entfernt
+            adapter.log.debug('splice       : ' + tmpp);
+
+            var array = getConfigObjects(adapter.config.sensors, 'sid', parseInt(tmpp[0]));
+            if (array.length === 0 || array.length !== 1) {
+                adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter or not unique received address');
+            }
+            else if (array[0].stype !== 'LaCrosseBMP180') {
+                adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter as LaCrosseBMP180');
+            }
+            else if (array[0].usid != 'nodef') {
+                adapter.log.debug('Sensor ID    : ' + (parseInt(tmpp[0])));
+                adapter.log.debug('Type         : ' + (parseInt(tmpp[1])));
+                adapter.log.debug('Temperatur   : ' + ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10));
+                //adapter.log.debug('Humidty      : ' + ((parseInt(tmpp[4])) * 1));
+                adapter.log.debug('Pressure      : ' + (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))));
+                // Werte schreiben
+                // aus gesendeter ID die unique ID bestimmen
+                //adapter.setState('LaCrosse_' + array[0].usid + '.humid', { val: (parseInt(tmpp[4]) * 1), ack: true });
                 adapter.setState('LaCrosse_' + array[0].usid + '.temp', { val: ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10), ack: true });
                 adapter.setState('LaCrosse_' + array[0].usid + '.pressure', { val: (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))), ack: true });
             }
