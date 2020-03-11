@@ -1927,6 +1927,7 @@ function main() {
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
 }
+/*
 adapter.on('stateChange', function (id, state) {
     if (timer) clearTimeout(timer);
     timer = setTimeout(function () {
@@ -1940,6 +1941,7 @@ adapter.on('stateChange', function (id, state) {
         });
 }, 60000);
 });
+*/
 // If started as allInOne/compact mode => return function to create instance
 if (module && module.parent) {
     module.exports = startAdapter;
