@@ -1598,6 +1598,34 @@ function defineLaCrosseBME280(id, name) {
         },
         native: {}
     });
+    adapter.setObjectNotExists('LaCrosse_' + id + '.abshumid', {
+        type: 'state',
+        common: {
+            "name": "abs Humidity",
+            "type": "number",
+            "unit": "g/m3",
+            "min": 0,
+            "max": 100,
+            "read": true,
+            "write": false,
+            "role": "value.humidity",
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosse_' + id + '.dewpoint', {
+        type: 'state',
+        common: {
+            "name": "Dewpoint",
+            "type": "number",
+            "unit": "°C",
+            "min": -50,
+            "max": 50,
+            "read": true,
+            "write": false,
+            "role": "value.temperature",
+        },
+        native: {}
+    });
     adapter.setObjectNotExists('LaCrosse_' + id + '.pressure', {
         type: 'state',
         common: {
@@ -1638,7 +1666,15 @@ function logLaCrosseBME280(data) {
                 adapter.log.debug('Pressure      : ' + (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))));
                 // Werte schreiben
                 // aus gesendeter ID die unique ID bestimmen
-                adapter.setState('LaCrosse_' + array[0].usid + '.humid', { val: (parseInt(tmpp[4]) * 1), ack: true }); 
+                var temp = ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10);
+                var rel = (parseInt(tmpp[4]) & 0x7f);
+                var vappress = rel / 100 * 6.1078 * Math.exp(((7.5 * temp) / (237.3 + temp)) / Math.LOG10E);
+                var v = Math.log(vappress / 6.1078) * Math.LOG10E;
+                var dewp = (237.3 * v) / (7.5 - v);
+                var habs = 1000 * 18.016 / 8314.3 * 100 * vappress / (273.15 + temp);
+                adapter.setState('LaCrosse_' + array[0].usid + '.abshumid', { val: round(habs, 1), ack: true });
+                adapter.setState('LaCrosse_' + array[0].usid + '.dewpoint', { val: round(dewp, 1), ack: true });
+                adapter.setState('LaCrosse_' + array[0].usid + '.humid', { val: ((parseInt(tmpp[4]) * 1)), ack: true }); 
                 adapter.setState('LaCrosse_' + array[0].usid + '.temp', { val: ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10), ack: true });
                 adapter.setState('LaCrosse_' + array[0].usid + '.pressure', { val: (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))), ack: true });
             }
