@@ -47,6 +47,13 @@ function startAdapter(options) {
             if (timer) clearTimeout(timer);
             timer = setTimeout(function() {
                 adapter.log.error('Verbund zum LGW unterbrochen');
+                client.end(function(end){
+                    adapter.log.debug('closed...');
+                });
+                client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+                    adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+                    client.setEncoding('utf-8');
+                });
             }, 60000);
         },
         // is called when databases are connected and adapter received configuration.
