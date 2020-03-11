@@ -1584,7 +1584,7 @@ function logValue(data) {
     var uptimeseconds = tmp[0].split('=');
     var uptime = tmp[1].split('=');
     adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds[1]), ack: true } );
-    adapter.setState('LaCrosseGW.uptimetext', { val: parseInt(uptime[1]), ack: true });
+    adapter.setState('LaCrosseGW.uptimetext', { val: uptime[1], ack: true });
     adapter.log.info('Value = ' + uptime[1]);
 
 }
