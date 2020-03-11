@@ -129,7 +129,18 @@ function defineLaCrosseGW() {
         },
         native: {}
     });
-    
+    adapter.setObjectNotExists('LaCrosseGW.rssi', {
+        type: 'state',
+        common: {
+            "name": "RSSI",
+            "type": "number",
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "RSSI"
+        },
+        native: {}
+    });
 }
 
 // OK 21 XXX XXX XXX XXX XXX
@@ -1610,10 +1621,12 @@ function logValue(data) {
     var uptime = tmp[1].split('=');
     var version = tmp[8].split('=');
     var mac = tmp[3].split('=');
+    var rssi = tmp[6].split('=');
     adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds[1]), ack: true } );
     adapter.setState('LaCrosseGW.uptimetext', { val: uptime[1], ack: true });
     adapter.setState('LaCrosseGW.version', { val: version[1], ack: true});
     adapter.setState('LaCrosseGW.mac', { val: mac[1], ack: true });
+    adapter.setState('LaCrosseGW.rssi', { val: parseInt(rssi[1]), ack: true });
     //adapter.log.info('Value = ' + uptime[1]);
 
 }
