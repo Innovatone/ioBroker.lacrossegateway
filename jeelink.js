@@ -1578,8 +1578,8 @@ function logLaCrosseBMP180(data){
 }
 
 function logValue(data) {
-    var tmp = data.split(' ');
-    var tmp1 = tmp[4].split(',');
+    //var tmp = data.split(' ');
+    var tmp1 = data.split(',');
     var uptimeseconds = tmp1[0].split('=');
     var uptime = tmp1[1].split('=');
     adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds[1]), ack: true } );
