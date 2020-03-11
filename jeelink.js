@@ -1788,16 +1788,30 @@ function logValue(data) {
     //var tmp = data.split(' ');
     var tmp = data.split(',');
     adapter.log.debug('logValue: ' + tmp);
+    tmp.forEach(elem, index) {
+        if (elem.search(/MacAddress/)) {
+            var mac = elem.split('=');
+            adapter.setState('LaCrosseGW.mac', { val: mac[1], ack: true });
+        };
+        if (elem.search(/Version/)) {
+            var version = elem.split('=');
+            adapter.setState('LaCrosseGW.version', { val: version[1], ack: true });
+        };
+        if (elem.search(/RSSI/)) {
+            var rssi = elem.split('=');
+            adapter.setState('LaCrosseGW.rssi', { val: rssi[1], ack: true });
+        };
+    };
     var uptimeseconds = tmp[0].split('=');
     var uptime = tmp[1].split('=');
-    var version = tmp[8].split('=');
-    var mac = tmp[3].split('=');
-    var rssi = tmp[6].split('=');
+    //var version = tmp[8].split('=');
+    //var mac = tmp[3].split('=');
+    //var rssi = tmp[6].split('=');
     adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds[1]), ack: true } );
     adapter.setState('LaCrosseGW.uptimetext', { val: uptime[1], ack: true });
-    adapter.setState('LaCrosseGW.version', { val: version[1], ack: true});
-    adapter.setState('LaCrosseGW.mac', { val: mac[1], ack: true });
-    adapter.setState('LaCrosseGW.rssi', { val: parseInt(rssi[1]), ack: true });
+    //adapter.setState('LaCrosseGW.version', { val: version[1], ack: true});
+    //adapter.setState('LaCrosseGW.mac', { val: mac[1], ack: true });
+    //adapter.setState('LaCrosseGW.rssi', { val: parseInt(rssi[1]), ack: true });
     //adapter.log.info('Value = ' + uptime[1]);
 
 }
