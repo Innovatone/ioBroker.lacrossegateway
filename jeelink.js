@@ -1788,17 +1788,19 @@ function logValue(data) {
     //var tmp = data.split(' ');
     var tmp = data.split(',');
     adapter.log.debug('logValue: ' + tmp);
-    tmp.forEach(elem, index) {
-        if (elem.search(/MacAddress/)) {
-            var mac = elem.split('=');
+    let len = tmp.length;
+    let i;
+    for (i=0; i < len; i++) {
+        if (tmp[i].search(/MacAddress/)) {
+            var mac = tmp[i].split('=');
             adapter.setState('LaCrosseGW.mac', { val: mac[1], ack: true });
         };
-        if (elem.search(/Version/)) {
-            var version = elem.split('=');
+        if (tmp[i].search(/Version/)) {
+            var version = tmp[i].split('=');
             adapter.setState('LaCrosseGW.version', { val: version[1], ack: true });
         };
-        if (elem.search(/RSSI/)) {
-            var rssi = elem.split('=');
+        if (tmp[i].search(/RSSI/)) {
+            var rssi = tmp[i].split('=');
             adapter.setState('LaCrosseGW.rssi', { val: rssi[1], ack: true });
         };
     };
