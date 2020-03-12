@@ -8,6 +8,7 @@ const TcpClient = require("net");
 var client = null;
 
 var timer = null;
+var timer2 = null;
 
 // you have to require the utils module and call adapter function
 const utils =  require('@iobroker/adapter-core'); // Get common adapter utils
@@ -1939,7 +1940,7 @@ function main() {
                         adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
                         client.setEncoding('utf-8');
                     });
-                }, 10000); 
+                }, 10000); // 10
             });
         }, 60000);
     })
