@@ -1926,21 +1926,20 @@ function main(adapter) {
     
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
+    adapter.on('stateChange', function (id, state) {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(function () {
+            adapter.log.error('Verbund zum LGW unterbrochen');
+            client.end(function (end) {
+                adapter.log.debug('closed...');
+            });
+            client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+                adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+                client.setEncoding('utf-8');
+            });
+        }, 60000);
+    });
 }
-
-adapter.on('stateChange', (id, state) => {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(function () {
-        adapter.log.error('Verbund zum LGW unterbrochen');
-        client.end(function (end) {
-            adapter.log.debug('closed...');
-        });
-        client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
-            adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
-            client.setEncoding('utf-8');
-        });
-}, 60000);
-});
 
 // If started as allInOne/compact mode => return function to create instance
 if (module && module.parent) {
