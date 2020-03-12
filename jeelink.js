@@ -1934,13 +1934,14 @@ function main() {
             adapter.log.error('Verbund zum LGW unterbrochen');
             client.end(function (end) {
                 adapter.log.debug('closed...');
-            });
-            client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
-                adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
-                client.setEncoding('utf-8');
+                timer2 = setTimeout(function () {
+                    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+                        adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+                        client.setEncoding('utf-8');
+                    });
+                }, 10000); 
             });
         }, 60000);
-    });
 }
 
 // If started as allInOne/compact mode => return function to create instance
