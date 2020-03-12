@@ -37,6 +37,7 @@ function startAdapter(options) {
             adapter.log.debug('objectChange ' + id + ' ' + JSON.stringify(obj));
         },
         // is called if a subscribed state changes
+        /*
         stateChange: function (id, state) {
             // Warning, state can be null if it was deleted
             adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
@@ -45,6 +46,7 @@ function startAdapter(options) {
                 adapter.log.debug('ack is not set!');
             };
         },
+        */
         // is called when databases are connected and adapter received configuration.
         // start here!
         ready: () => {
@@ -1821,7 +1823,7 @@ function write_cmd(command){
             });
         }
 
-function main(adapter) {
+function main() {
 
     // The adapters config (in the instance object everything under the attribute "native") is accessible via
     // adapter.config:
