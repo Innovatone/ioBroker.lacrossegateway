@@ -1930,6 +1930,11 @@ function main() {
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
     adapter.on('stateChange', function (id, state) {
+        adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
+        // you can use the ack flag to detect if it is status (true) or command (false)
+        if (state && !state.ack) {
+            adapter.log.debug('ack is not set!');
+        };
         if (timer) clearTimeout(timer);
         timer = setTimeout(function () {
             adapter.log.error('Verbund zum LGW unterbrochen');
