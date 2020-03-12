@@ -1940,9 +1940,9 @@ function main() {
                         adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
                         client.setEncoding('utf-8');
                     });
-                }, 10000); // 10
+                }, 15000); // 15 Sekunden warten bis open
             });
-        }, 60000);
+        }, 120000); // 120 Sekunden auf sate change warten
     })
 }
 
