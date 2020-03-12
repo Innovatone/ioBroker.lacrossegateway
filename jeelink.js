@@ -1942,6 +1942,7 @@ function main() {
                 }, 10000); 
             });
         }, 60000);
+    })
 }
 
 // If started as allInOne/compact mode => return function to create instance
