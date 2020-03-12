@@ -1928,7 +1928,7 @@ function main(adapter) {
     adapter.subscribeStates('*');
 }
 
-adapter.on('stateChange', function (id, state) {
+adapter.on('stateChange', (id, state) => {
     if (timer) clearTimeout(timer);
     timer = setTimeout(function () {
         adapter.log.error('Verbund zum LGW unterbrochen');
