@@ -7,7 +7,7 @@
 [![NPM](https://nodei.co/npm/iobroker.jeelink.png?downloads=true)](https://nodei.co/npm/iobroker.jeelink/)
 
 This is an adapter for ioBroker to integrate RFM12B/RFM69 via a LaCrosseGateway.
-The LaCrosseGateway documentation cab be found at https://wiki.fhem.de/wiki/LaCrosseGateway_V1.x
+The LaCrosseGateway documentation can be found at https://wiki.fhem.de/wiki/LaCrosseGateway_V1.x
 
 ## Installation:
 ### released version
@@ -47,7 +47,8 @@ to be done in admin
 |LaCrosseDTH |TX|OK 9 ... |sensors from LaCrosse, technoline|
 |LaCrosseDTT |TX|OK 9 ... |sensors from LaCrosse, technoline double temp|
 |HMS100TF |TXH29DTH-IT|H00 ... |sensors technoline|
-|LaCrosseBMP180||OK WS ... |sensor mod, superjee|
+|LaCrosseBMP180||OK WS ... |sensor mod, LGW internal|
+|LaCrosseBME280||OK WS ... |sensor mod, LGW internal|
 |LaCrosseWS|WS1080,TX22,WS1600|OK WS ... |Weather Station|
 |EC3000|EC3000|OK 22 ... |Energy Meter|
 |EMT7110|EMT7110|OK EMT7110 ... |Energy Meter|
