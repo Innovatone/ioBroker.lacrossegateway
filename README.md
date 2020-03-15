@@ -23,20 +23,20 @@ on raspberry it might help to use:
 
 ### the actual development version from github (when under testing, may not work!)
 ```javascript
-npm install https://github.com/foxthefox/ioBroker.jeelink/tarball/master --production
+npm install https://github.com/verba03/ioBroker.jeelink/tarball/master --production
 ```
 or
 ```javascript
-npm install --unsafe-perm https://github.com/foxthefox/ioBroker.jeelink/tarball/master --production
+npm install --unsafe-perm https://github.com/verba03/ioBroker.jeelink/tarball/master --production
 ```
 ## Settings:
-- USB port of JeelinkAdapter usually /dev/ttyACME
-- Serial Speed usually 57600 Baud
+- IP address of LaCrosseGateway
+- IP port of LaCrosseGateway
 
 ## Configuration:
 to be done in admin
-* deinition of the USB port
-* setting the baudrate
+* definition of the IP address
+* setting the IP port
 - define sensor address which is received on air
 - define unique sensors address within adapter (LaCrosse changes the on air address after battery change, so observe the log and adjust the sensor address after battery change)
 - define the type of sensor (see belows examples)
