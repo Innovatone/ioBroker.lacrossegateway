@@ -1,8 +1,20 @@
 {
     "common": {
-        "name": "jeelink",
-        "version": "0.2.0",
+        "name": "lacrossegateway",
+        "version": "0.2.1",
         "news": {
+            "0.2.1": {
+                "en": "Innovatone Bug Fix Release",
+                "de": "Innovatone Bug Fix Release",
+                "ru": "новый датчик с двойной температурой",
+                "pt": "novo sensor com dupla temperatura",
+                "nl": "nieuwe sensor met dubbele temp",
+                "fr": "nouveau capteur à double temp",
+                "it": "nuovo sensore con doppia temperatura",
+                "es": "nuevo sensor con doble temperatura",
+                "pl": "nowy czujnik z podwójną temperaturą",
+                "zh-cn": "新型双温传感器"
+            },
             "0.2.0": {
                 "en": "first development release using LaCrosseGateway",
                 "de": "Erste Entwicklungsfreigabe für LaCrosseGateway",
@@ -146,29 +158,34 @@
         "mode": "daemon",
         "license": "MIT",
         "keywords": [
-            "jeelink",
-            "openenergy",
-            "RFM",
-            "LaCrosse",
-            "emonTH"
-        ],
+        "ioBroker",
+        "Jeelink",
+        "Lacrossegateway",
+        "Lacrosse",
+        "Openenergy",
+        "RFM12B",
+        "EMT7110",
+        "Technoline",
+        "EC3000",
+        "EC3K"
+        ], 
         "type": "hardware",
         "icon": "jeelab_logo.png",
-        "extIcon": "https://raw.githubusercontent.com/foxthefox/ioBroker.jeelink/master/admin/jeelab_logo.png",
-        "readme": "https://github.com/foxthefox/ioBroker.jeelink/blob/master/README.md",
+        "extIcon": "https://raw.githubusercontent.com/innovatone/ioBroker.lacrossegateway/master/admin/jeelab_logo.png",
+        "readme": "https://github.com/innnovatone/ioBroker.lacrossegateway/blob/master/README.md",
         "loglevel": "debug",
         "materialize": true,
         "compact": true,
         "authors": [
             {
-                "name": "foxthefox",
-                "email": "foxthefox@wysiwis.net"
+                "name": "Innovatone",
+                "email": "innovatone@gmail.com"
             }
         ]
     },
     "native": {
         "ipaddress": "192.168.2.206",
-        "ipport": 8183,
+        "ipport": 81,
         "command": "",
         "command_en": false,
         "sensors": [

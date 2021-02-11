@@ -23,7 +23,7 @@ let adapter;
 function startAdapter(options) {
      options = options || {};
      Object.assign(options, {
-          name: 'jeelink',
+          name: 'lacrossegateway',
           // is called when adapter shuts down - callback has to be called under any circumstances!
           unload: function (callback) {
             try {

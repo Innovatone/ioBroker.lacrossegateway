@@ -1,113 +1,123 @@
-![Logo](admin/jeelab_logo.png)
-# ioBroker.jeelink
-![Number of Installations](http://iobroker.live/badges/jeelink-installed.svg) ![Number of Installations](http://iobroker.live/badges/jeelink-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.jeelink.svg)](https://www.npmjs.com/package/iobroker.jeelink)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.jeelink.svg)](https://www.npmjs.com/package/iobroker.jeelink)
-[![Build Status](https://travis-ci.org/foxthefox/ioBroker.jeelink.svg?branch=master)](https://travis-ci.org/foxthefox/ioBroker.jeelink)
+![Logo](admin/template.png)
+# ioBroker.template
 
-[![NPM](https://nodei.co/npm/iobroker.jeelink.png?downloads=true)](https://nodei.co/npm/iobroker.jeelink/)
+[![NPM version](http://img.shields.io/npm/v/iobroker.template.svg)](https://www.npmjs.com/package/iobroker.template)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.template.svg)](https://www.npmjs.com/package/iobroker.template)
+![Number of Installations (latest)](http://iobroker.live/badges/template-installed.svg)
+![Number of Installations (stable)](http://iobroker.live/badges/template-stable.svg)
+[![Dependency Status](https://img.shields.io/david/Author/iobroker.template.svg)](https://david-dm.org/Author/iobroker.template)
+[![Known Vulnerabilities](https://snyk.io/test/github/Author/ioBroker.template/badge.svg)](https://snyk.io/test/github/Author/ioBroker.template)
 
-This is an adapter for ioBroker to integrate RFM12B/RFM69 via a LaCrosseGateway.
-The LaCrosseGateway documentation can be found at https://wiki.fhem.de/wiki/LaCrosseGateway_V1.x
+[![NPM](https://nodei.co/npm/iobroker.template.png?downloads=true)](https://nodei.co/npm/iobroker.template/)
 
-## Installation:
-### released version
-```javascript
-there is no production release right now
-```
-on raspberry it might help to use:
-```javascript
-there is no production release right now
- ```
-### the actual development version from github (when under testing, may not work!)
-```javascript
-npm install https://github.com/verba03/ioBroker.jeelink/tarball/master --production
-```
-or
-```javascript
-npm install --unsafe-perm https://github.com/verba03/ioBroker.jeelink/tarball/master --production
-```
-## Settings:
-- IP address of LaCrosseGateway
-- IP port of LaCrosseGateway
+**Tests:** ![Test and Release](https://github.com/Author/ioBroker.template/workflows/Test%20and%20Release/badge.svg)
 
-## Configuration:
-to be done in admin
-* definition of the IP address
-* setting the IP port
-- define sensor address which is received on air
-- define unique sensors address within adapter (LaCrosse changes the on air address after battery change, so observe the log and adjust the sensor address after battery change)
-- define the type of sensor (see belows examples)
-- define the room
+## template adapter for ioBroker
 
-## Sensors
-|Object|device variants|telegram example|Description|
-|--------|-------|:-:|--------|
-|emonTH|emonTH|OK 19 ...|sensor from openenergy.org|
-|emonWater|emonWater|OK 21 ... |sensor with RFM12B for water metering|
-|LaCrosseDTH |TX|OK 9 ... |sensors from LaCrosse, technoline|
-|LaCrosseDTT |TX|OK 9 ... |sensors from LaCrosse, technoline double temp|
-|HMS100TF |TXH29DTH-IT|H00 ... |sensors technoline|
-|LaCrosseBMP180||OK WS ... |sensor mod, LGW internal|
-|LaCrosseBME280||OK WS ... |sensor mod, LGW internal|
-|LaCrosseWS|WS1080,TX22,WS1600|OK WS ... |Weather Station|
-|EC3000|EC3000|OK 22 ... |Energy Meter|
-|EMT7110|EMT7110|OK EMT7110 ... |Energy Meter|
-|level|level|OK LS ... |level sensor|
+Template for adapter development
 
-## TODO:
-* other sensor types
-* put the sensor code in separate file
-* pushing new sensor to config, then visible in admin/config page
-* HMS100TF Temp below 0°C and battery low to be implemented
+## Developer manual
+This section is intended for the developer. It can be deleted later
 
+### Getting started
 
-## Changelog:
-### 0.2.0
-* first development release using LaCrosseGateway. Code based on adapter of foxthefox. Thanks.
+You are almost done, only a few steps left:
+1. Create a new repository on GitHub with the name `ioBroker.template`
+1. Initialize the current folder as a new git repository:  
+    ```bash
+    git init
+    git add .
+    git commit -m "Initial commit"
+    ```
+1. Link your local repository with the one on GitHub:  
+    ```bash
+    git remote add origin https://github.com/Author/ioBroker.template
+    ```
 
-### 0.1.3
-* (atl285) added new sensor type LacCrosseDTT (double temp like TX25-IT)
+1. Push all files to the GitHub repo:  
+    ```bash
+    git push origin master
+    ```
+1. Add a new secret under https://github.com/Author/ioBroker.template/settings/secrets. It must be named `AUTO_MERGE_TOKEN` and contain a personal access token with push access to the repository, e.g. yours. You can create a new token under https://github.com/settings/tokens.
 
-### 0.1.2
-* correction for weather (no data is given by value = 255)
+1. Head over to [main.js](main.js) and start programming!
 
-### 0.1.1
-* delete buffer function to be compatible with nodejs10
-* enhanced automatic testing
+### Best Practices
+We've collected some [best practices](https://github.com/ioBroker/ioBroker.repositories#development-and-coding-best-practices) regarding ioBroker development and coding in general. If you're new to ioBroker or Node.js, you should
+check them out. If you're already experienced, you should also take a look at them - you might learn something new :)
 
-### 0.1.0
-* compact mode
+### Scripts in `package.json`
+Several npm scripts are predefined for your convenience. You can run them using `npm run <scriptname>`
+| Script name | Description |
+|-------------|-------------|
+| `test:js` | Executes the tests you defined in `*.test.js` files. |
+| `test:package` | Ensures your `package.json` and `io-package.json` are valid. |
+| `test:unit` | Tests the adapter startup with unit tests (fast, but might require module mocks to work). |
+| `test:integration` | Tests the adapter startup with an actual instance of ioBroker. |
+| `test` | Performs a minimal test run on package files and your tests. |
+| `check` | Performs a type-check on your code (without compiling anything). |
+| `lint` | Runs `ESLint` to check your code for formatting errors and potential bugs. |
 
-### 0.0.7
-* new level sensor (fhem)
+### Writing tests
+When done right, testing code is invaluable, because it gives you the 
+confidence to change your code while knowing exactly if and when 
+something breaks. A good read on the topic of test-driven development 
+is https://hackernoon.com/introduction-to-test-driven-development-tdd-61a13bc92d92. 
+Although writing tests before the code might seem strange at first, but it has very 
+clear upsides.
 
-### 0.0.6
-* last version of serialport
-* new sensor TXH29DTH-IT
-* new weather station WS1600
-* new sensor EC3000, EMT7110 not verified with life data
+The template provides you with basic tests for the adapter startup and package files.
+It is recommended that you add your own tests into the mix.
 
-### 0.0.5
-* adminv3 improved with values2table
+### Publishing the adapter
+Since you have chosen GitHub Actions as your CI service, you can 
+enable automatic releases on npm whenever you push a new git tag that matches the form 
+`v<major>.<minor>.<patch>`. The necessary steps are described in `.github/workflows/test-and-release.yml`.
 
-### 0.0.4
-* command to USB-stick for configuration
-* added superjee, BMP180 sensor on jeenode
-* admin v3 implementation
+To get your adapter released in ioBroker, please refer to the documentation 
+of [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#requirements-for-adapter-to-get-added-to-the-latest-repository).
 
-### 0.0.3
-* abs humidity and dewpoint calculation
+### Test the adapter manually on a local ioBroker installation
+In order to install the adapter locally without publishing, the following steps are recommended:
+1. Create a tarball from your dev directory:  
+    ```bash
+    npm pack
+    ```
+1. Upload the resulting file to your ioBroker host
+1. Install it locally (The paths are different on Windows):
+    ```bash
+    cd /opt/iobroker
+    npm i /path/to/tarball.tgz
+    ```
 
-### 0.0.2
-* definition of unique sensor ID for iobroker datapoint
-* implementation of LaCrosseDTH
-* definition of sensors via admin
+For later updates, the above procedure is not necessary. Just do the following:
+1. Overwrite the changed files in the adapter directory (`/opt/iobroker/node_modules/iobroker.template`)
+1. Execute `iobroker upload template` on the ioBroker host
+
+## Changelog
 
 ### 0.0.1
-* working with 3 sensors emon
+* (Author) initial release
 
 ## License
+MIT License
 
-The MIT License (MIT)
+Copyright (c) 2020 Author <author@mail.com>
 
-Copyright (c) 2018 - 2020 foxthefox <foxthefox@wysiwis.net>
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
