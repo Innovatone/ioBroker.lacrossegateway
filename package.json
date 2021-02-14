@@ -1,7 +1,7 @@
 {
   "name": "iobroker.lacrossegateway",
-  "version": "0.0.1",
-  "description": "The Jeelink Lacrossegateway Adapter",
+  "version": "0.2.2",
+  "description": "The Lacrossegateway Adapter",
   "author": {
     "name": "Innovatone",
     "email": "innovatone@gmail.com"

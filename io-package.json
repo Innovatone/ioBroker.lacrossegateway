@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "lacrossegateway",
-        "version": "0.2.1",
+        "version": "0.2.2",
         "news": {
+            "0.2.2": {
+                "en": "Name changes",
+                "de": "Name geändert",
+                "ru": "новый датчик с двойной температурой",
+                "pt": "novo sensor com dupla temperatura",
+                "nl": "nieuwe sensor met dubbele temp",
+                "fr": "nouveau capteur à double temp",
+                "it": "nuovo sensore con doppia temperatura",
+                "es": "nuevo sensor con doble temperatura",
+                "pl": "nowy czujnik z podwójną temperaturą",
+                "zh-cn": "新型双温传感器"
+            },
             "0.2.1": {
                 "en": "Innovatone Bug Fix Release",
                 "de": "Innovatone Bug Fix Release",
