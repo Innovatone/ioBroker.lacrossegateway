@@ -1,29 +1,35 @@
 {
-  "name": "iobroker.jeelink",
+  "name": "iobroker.lacrossegateway",
   "version": "0.2.0",
-  "description": "ioBroker jeelink LaCrosse Gateway",
+  "description": "ioBroker LacrosseGateway Jeelink Adapter",
   "author": {
-    "name": "verba03",
-    "email": "vmeineke@gmail.com"
+    "name": "Inovatone",
+    "email": "innovatone@gmail.com"
   },
   "contributors": [
-    {}
+    "verba03 <vmeineke@gmail.com>",
+    "foxthefox <foxthefox@wysiwis.net>"
   ],
-  "homepage": "https://github.com/verba03/ioBroker.jeelink",
+  "homepage": "https://github.com/Innovatone/ioBroker.lacrossegateway",
   "license": "MIT",
-  "keywords": [
+    "keywords": [
     "ioBroker",
-    "jeelink",
-    "RFM",
-    "openenergymonitor"
+    "Jeelink",
+    "Lacrossegateway",
+    "Lacrosse",
+    "Openenergy",
+    "RFM12B",
+    "EMT7110",
+    "Technoline",
+    "EC3000",
+    "EC3K"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/verba03/ioBroker.jeelink"
+    "url": "https://github.com/Innovatone/ioBroker.lacrossegateway"
   },
   "dependencies": {
-    "serialport": "^7.1.5",
-    "@iobroker/adapter-core": "^1.0.3"
+    "@iobroker/adapter-core": "^2.4.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
@@ -32,11 +38,14 @@
     "proxyquire":"^2.1.0"
   },
   "bugs": {
-    "url": "https://github.com/verba03/ioBroker.jeelink/issues"
+    "url": "https://github.com/Innovatone/ioBroker.lacrossegateway/issues"
   },
-  "main": "jeelink.js",
+  "main": "main.js",
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha --exit"
+  },
+    "bugs": {
+    "url": "https://github.com/Innovatone/ioBroker.lacrossegateway/issues"
   },
   "readmeFilename": "README.md"
 }

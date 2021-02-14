@@ -23,7 +23,7 @@ let adapter;
 function startAdapter(options) {
      options = options || {};
      Object.assign(options, {
-          name: 'jeelink',
+          name: 'lacrossegateway',
           // is called when adapter shuts down - callback has to be called under any circumstances!
           unload: function (callback) {
             try {
@@ -856,6 +856,7 @@ function defineEC3000(id, name){
     });
 }
 
+// OK 22 119 126 1 52 140 250 0 238 79 60 0 1 12 50 0 2 83 126 2 0 [77 7E 8C FA 00 00 4F 3C 00 00 00 0E BB 87 77 00 02 53 7E 00 21 38 4C 13 03 19 80 2D F1 13 40 00 00 00 00 0E E0 28 05 D6 17]
 function logEC3000(data){
     var tmp = data.split(' ');
     if(tmp[0]==='OK'){                      // Wenn ein Datensatz sauber gelesen wurde
@@ -1789,7 +1790,7 @@ function logLaCrosseBMP180(data) {
     }
 }
 
-
+//OK VALUES LGW 1416620 UpTimeSeconds=111283,UpTimeText=1Tg. 6Std. 54Min. 43Sek. ,WIFI=FRITZ!Box 7590 BE,ReceivedFrames=7314,FramesPerMinute=9,RSSI=-69,FreeHeap=27648,LD.Min=0.51,LD.Avg=0.56,LD.Max=14.92,OLED=none
 function logValue(data) {
     var tmp = data.split(',');
     adapter.log.debug('logValue: ' + tmp);
@@ -1867,16 +1868,16 @@ function main() {
     }
 
     var options = {
-        clientPort:   parseInt(adapter.config.ipport)
+        clientPort:   parseInt(adapter.config.port)
     };
 
-    adapter.log.debug('configured IP address : ' + adapter.config.ipaddress );
-    adapter.log.debug('configured IP port : ' + adapter.config.ipport );
+    adapter.log.debug('configured IP address : ' + adapter.config.host );
+    adapter.log.debug('configured IP port : ' + adapter.config.port );
     //adapter.log.debug('options : ' + JSON.stringify(options) );   
     const client = new TcpClient.Socket();
-        //const client = new net.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
-    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
-        adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+        //const client = new net.Socket(adapter.config.port, adapter.config.host, function (error) {
+    client.connect(adapter.config.port, adapter.config.host, function (connect) {
+        adapter.log.info('open: ' + adapter.config.host + ':' + adapter.config.port);
         client.setEncoding('utf-8');
     });
 
@@ -1942,8 +1943,8 @@ function main() {
             client.end(function (end) {
                 adapter.log.debug('closed...');
                 timer2 = setTimeout(function () {
-                    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
-                        adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+                    client.connect(adapter.config.port, adapter.config.host, function (connect) {
+                        adapter.log.info('open: ' + adapter.config.host + ':' + adapter.config.port);
                         client.setEncoding('utf-8');
                     });
                 }, 15000); // 15 Sekunden warten bis open
