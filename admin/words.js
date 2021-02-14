@@ -1,15 +1,15 @@
     // Dictionary (systemDictionary is global variable from adapter-settings.js)
     systemDictionary = {
-  "jeelink adapter settings": {
-    "en": "jeelink adapter settings",
+  "Lacrossegateway adapter settings": {
+    "en": "Lacrossegateway adapter settings",
     "de": "Jeelink-Adaptereinstellungen",
-    "ru": "настройки адаптера jeelink",
-    "pt": "Configurações do adaptador jeelink",
-    "nl": "jeelink-adapterinstellingen",
-    "fr": "paramètres de l'adaptateur jeelink",
-    "it": "impostazioni della scheda jeelink",
-    "es": "configuración del adaptador jeelink",
-    "pl": "ustawienia adaptera jeelink"
+    "ru": "настройки адаптера Lacrossegateway",
+    "pt": "Configurações do adaptador Lacrossegateway",
+    "nl": "Lacrossegateway-adapterinstellingen",
+    "fr": "paramètres de l'adaptateur Lacrossegateway",
+    "it": "impostazioni della scheda Lacrossegateway",
+    "es": "configuración del adaptador Lacrossegateway",
+    "pl": "ustawienia adaptera Lacrossegateway"
   },
   "name": {
     "en": "name",
@@ -55,16 +55,16 @@
     "es": "identificación única del sensor",
     "pl": "unikalny identyfikator czujnika"
   },
-  "jeelink TCP adapter settings": {
-    "en": "jeelink TCP adapter settings",
+  "Lacrossegateway TCP adapter settings": {
+    "en": "Lacrossegateway TCP adapter settings",
     "de": "Jeelink TCP-Adaptereinstellungen",
-    "ru": "Настройки адаптера USB-устройства jeelink",
-    "pt": "Configurações do adaptador USB do jeelink",
-    "nl": "jeelink USB-adapterinstellingen",
-    "fr": "paramètres de l'adaptateur USB jeelink",
-    "it": "jeelink Impostazioni dell'adattatore USB",
-    "es": "configuración del adaptador USB jeelink",
-    "pl": "ustawienia adaptera USB jeelink"
+    "ru": "Настройки адаптера USB-устройства Lacrossegateway",
+    "pt": "Configurações do adaptador USB do Lacrossegateway",
+    "nl": "Lacrossegateway USB-adapterinstellingen",
+    "fr": "paramètres de l'adaptateur USB Lacrossegateway",
+    "it": "Lacrossegateway Impostazioni dell'adattatore USB",
+    "es": "configuración del adaptador USB Lacrossegateway",
+    "pl": "ustawienia adaptera USB Lacrossegateway"
   },
   "valid sensor types:": {
     "en": "valid sensor types:",

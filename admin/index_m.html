@@ -55,9 +55,9 @@
             }
             values2table('values', sensors, onChange);
             /**
-            socket.emit('subscribeObjects',  'jeelink.' + instance + '.*');
-            socket.emit('subscribeStates',  'jeelink.' + instance + '.*');
-            socket.emit('getState', 'jeelink.' + instance + '.foundDevices.val', function (err, state) {
+            socket.emit('subscribeObjects',  'Lacrossegateway.' + instance + '.*');
+            socket.emit('subscribeStates',  'Lacrossegateway.' + instance + '.*');
+            socket.emit('getState', 'Lacrossegateway.' + instance + '.foundDevices.val', function (err, state) {
                 console.log("got the following config : "+ JSON.stringify(state));
                         if (!err) {
                             showMessage("new devices found " +JSON.stringify(state) );

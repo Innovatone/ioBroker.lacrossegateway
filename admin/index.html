@@ -23,10 +23,10 @@
 
     // Dictionary (systemDictionary is global variable from adapter-settings.js)
     systemDictionary = {
-        "jeelink adapter settings": {
-            "en": "jeelink adapter settings",       
-            "de": "jeelink Adapter Einstellung",   
-            "ru": "Настройки jeelink Драйвера"
+        "Lacrossegateway adapter settings": {
+            "en": "Lacrossegateway adapter settings",       
+            "de": "Lacrossegateway Adapter Einstellung",   
+            "ru": "Настройки Lacrossegateway Драйвера"
             },
         "name":{
             "en": "Name",                          
@@ -48,10 +48,10 @@
             "de": "eineindeutige Sensor ID",
             "ru": "unique ID сенсора"
             },    
-        "jeelink USB adapter settings": {
-            "en": "jeelink USB adapter settings",       
-            "de": "jeelink USB Einstellung",   
-            "ru": "Настройки jeelink USB"
+        "Lacrossegateway USB adapter settings": {
+            "en": "Lacrossegateway USB adapter settings",       
+            "de": "Lacrossegateway USB Einstellung",   
+            "ru": "Настройки Lacrossegateway USB"
             },            
         "valid sensor types:": {
             "en": "valid sensor types:",       
@@ -142,9 +142,9 @@
 
             editTable('sensors', ['usid','sid', 'stype', 'name'], sensors, 470);
             /**
-            socket.emit('subscribeObjects',  'jeelink.' + instance + '.*');
-            socket.emit('subscribeStates',  'jeelink.' + instance + '.*');
-            socket.emit('getState', 'jeelink.' + instance + '.foundDevices.val', function (err, state) {
+            socket.emit('subscribeObjects',  'Lacrossegateway.' + instance + '.*');
+            socket.emit('subscribeStates',  'Lacrossegateway.' + instance + '.*');
+            socket.emit('getState', 'Lacrossegateway.' + instance + '.foundDevices.val', function (err, state) {
                 console.log("got the following config : "+ JSON.stringify(state));
 
                         if (!err) {
@@ -187,11 +187,11 @@
     <table>
         <tr>
             <td><img src="jeelab_logo.png"/></td>
-            <td><h3 class="translate">jeelink adapter Settings</h3></td>
+            <td><h3 class="translate">Lacrossegateway adapter Settings</h3></td>
         </tr>
     </table>
     
-    <h4 class="translate">jeelink TCP adapter settings</h4>
+    <h4 class="translate">Lacrossegateway TCP adapter settings</h4>
     <table>
         <tr>
             <td class="translate">IP Address</td>

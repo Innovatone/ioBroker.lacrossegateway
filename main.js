@@ -4,6 +4,8 @@
 
 //const SerialPort = require("serialport");
 //const Readline = SerialPort.parsers.Readline;
+const net = require('net');
+
 const TcpClient = require("net");
 var client = null;
 
@@ -52,8 +54,8 @@ function startAdapter(options) {
         // is called when databases are connected and adapter received configuration.
         // start here!
         ready: () => {
-      		main()
-		}
+            main()
+        }
      });
      adapter = new utils.Adapter(options);
      
@@ -71,9 +73,9 @@ function getConfigObjects(Obj, where, what){
 }
 function round(value, digits) //digits 1 for 1 digit after comma
 {
-	var factor = Math.pow(10, digits);
-	value = Math.round(value*factor);
-	return value/factor;
+    var factor = Math.pow(10, digits);
+    value = Math.round(value*factor);
+    return value/factor;
 }
 
 function defineLaCrosseGW() {
@@ -856,6 +858,7 @@ function defineEC3000(id, name){
     });
 }
 
+// OK 22 119 126 1 52 140 250 0 238 79 60 0 1 12 50 0 2 83 126 2 0 [77 7E 8C FA 00 00 4F 3C 00 00 00 0E BB 87 77 00 02 53 7E 00 21 38 4C 13 03 19 80 2D F1 13 40 00 00 00 00 0E E0 28 05 D6 17]
 function logEC3000(data){
     var tmp = data.split(' ');
     if(tmp[0]==='OK'){                      // Wenn ein Datensatz sauber gelesen wurde
@@ -864,13 +867,31 @@ function logEC3000(data){
             var tmpp=tmp.splice(2,21);       // es werden die vorderen Blöcke (0,1,2) entfernt
             adapter.log.debug('splice       : '+ tmpp);
             
-            var id = (parseInt(tmpp[0])*256 + parseInt(tmpp[1]));
+            var id = (parseInt(tmpp[0])*256 + parseInt(tmpp[1])).toString(16).toUpperCase();
             var array=getConfigObjects(adapter.config.sensors, 'sid', id);
             if (array.length === 0 || array.length !== 1) {
-                adapter.log.debug('received ID :' + id + ' is not defined in the adapter or not unique received address');
+                adapter.log.debug('EC3000 received ID :' + id + ' is not defined in the adapter or not unique received address');
+                // new sensor -> config (not nice, because auf adapter restart, but works)
+                adapter.getForeignObject('system.adapter.' + adapter.namespace, function(err,obj){
+                    if (err){
+                        adapter.log.error(err);
+                    }
+                    else {
+                        adapter.log.debug("native object : " + JSON.stringify(obj.native.sensors));
+                        obj.native.sensors.push({"sid": id, "usid":"nodef" , "stype":"LaCrosse???" , "name":"room???"});
+                        adapter.setForeignObject('system.adapter.' + adapter.namespace, obj, function(err){
+                            if(err) {
+                                adapter.log.error(err);
+                            }
+                            else {
+                               adapter.log.info("new sensor ID = "+ id + "added to config, please see admin page of adapter for further configuration");
+                           }
+                    });
+                }
+
             }
             else if (array[0].stype !==  'EC3000'){
-                adapter.log.debug('received ID :' + id + ' is not defined in the adapter as LaCrosseWS');
+                adapter.log.debug('EC3000 received ID :' + id.toString(16).toUpperCase() + ' is not defined in the adapter as EC3000');
             }
             else if (array[0].usid != 'nodef'){
                 adapter.log.debug('Station ID   : '+ id );
@@ -1472,50 +1493,50 @@ function logLaCrosseWS(data){
             else if (array[0].usid != 'nodef'){
                 adapter.log.debug('Station ID    : '+ (parseInt(tmpp[0])) );
                 adapter.log.debug('Type         : '+ (parseInt(tmpp[1])) ); //should be 3 otherwise it is only temperature
-		if ((parseInt(tmpp[2])) === 255){
-		    adapter.log.debug('Temperature   : no data (255)');
-		    } 
-		else {
+        if ((parseInt(tmpp[2])) === 255){
+            adapter.log.debug('Temperature   : no data (255)');
+            } 
+        else {
             adapter.log.debug('Temperature   : '+ ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10) ) ; // Vorzeichen fehlt noch
             adapter.setState('LaCrosseWS_'+ array[0].usid +'.temp',    {val: ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10), ack: true});
-	    	}
-		if  ((parseInt(tmpp[4])) === 255){
-		    adapter.log.debug('Humidty   : no data (255)');
-		    } 
-		else {
+            }
+        if  ((parseInt(tmpp[4])) === 255){
+            adapter.log.debug('Humidty   : no data (255)');
+            } 
+        else {
             adapter.log.debug('Humidty      : '+ ((parseInt(tmpp[4]))*1) );
-			adapter.setState('LaCrosseWS_'+ array[0].usid +'.humid',   {val: ((parseInt(tmpp[4])*1)), ack: true});    
-		}
-		if  ((parseInt(tmpp[5])) === 255){
-		    adapter.log.debug('Rain   : no data (255)');
-		    }
-		else {
+            adapter.setState('LaCrosseWS_'+ array[0].usid +'.humid',   {val: ((parseInt(tmpp[4])*1)), ack: true});    
+        }
+        if  ((parseInt(tmpp[5])) === 255){
+            adapter.log.debug('Rain   : no data (255)');
+            }
+        else {
             adapter.log.debug('Rain         : '+ ((((parseInt(tmpp[5]))*256)+(parseInt(tmpp[6])))/2) );
-			adapter.setState('LaCrosseWS_'+ array[0].usid +'.rain',    {val: ((((parseInt(tmpp[5]))*256)+(parseInt(tmpp[6])))/2), ack: true});
-		    }
-		if  ((parseInt(tmpp[9])) === 255){
-		    adapter.log.debug('Wind Speed   : no data (255)');
-		    }
-		else {		    
+            adapter.setState('LaCrosseWS_'+ array[0].usid +'.rain',    {val: ((((parseInt(tmpp[5]))*256)+(parseInt(tmpp[6])))/2), ack: true});
+            }
+        if  ((parseInt(tmpp[9])) === 255){
+            adapter.log.debug('Wind Speed   : no data (255)');
+            }
+        else {          
             adapter.log.debug('WindSpeed    : '+ ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10) );
-	        adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed',  {val: ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10), ack: true});
-	        adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed2',  {val: round( ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10)*3.6, 2), ack: true});
+            adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed',  {val: ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10), ack: true});
+            adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed2',  {val: round( ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10)*3.6, 2), ack: true});
 
-		}
-		if  ((parseInt(tmpp[7])) === 255){
-		    adapter.log.debug('WindDirection   : no data (255)');
-		    }
-		else {				    
-                	adapter.log.debug('WindDirection: '+ ((((parseInt(tmpp[7]))*256)+(parseInt(tmpp[8])))/10) );
-			adapter.setState('LaCrosseWS_'+ array[0].usid +'.wdir',    {val: ((((parseInt(tmpp[7]))*256)+(parseInt(tmpp[8])))/10), ack: true});	
-		}
-		if  ((parseInt(tmpp[11])) === 255){
-		    adapter.log.debug('WindGust   : no data (255)');
-		    }
-		else {			    
-                	adapter.log.debug('WindGust     : '+ ((((parseInt(tmpp[11]))*256)+(parseInt(tmpp[12])))/10) );
-               		adapter.setState('LaCrosseWS_'+ array[0].usid +'.wgust',   {val: ((((parseInt(tmpp[11]))*256)+(parseInt(tmpp[12])))/10), ack: true});
-		}
+        }
+        if  ((parseInt(tmpp[7])) === 255){
+            adapter.log.debug('WindDirection   : no data (255)');
+            }
+        else {                  
+                    adapter.log.debug('WindDirection: '+ ((((parseInt(tmpp[7]))*256)+(parseInt(tmpp[8])))/10) );
+            adapter.setState('LaCrosseWS_'+ array[0].usid +'.wdir',    {val: ((((parseInt(tmpp[7]))*256)+(parseInt(tmpp[8])))/10), ack: true}); 
+        }
+        if  ((parseInt(tmpp[11])) === 255){
+            adapter.log.debug('WindGust   : no data (255)');
+            }
+        else {              
+                    adapter.log.debug('WindGust     : '+ ((((parseInt(tmpp[11]))*256)+(parseInt(tmpp[12])))/10) );
+                    adapter.setState('LaCrosseWS_'+ array[0].usid +'.wgust',   {val: ((((parseInt(tmpp[11]))*256)+(parseInt(tmpp[12])))/10), ack: true});
+        }
                 adapter.log.debug('NewBattery   : '+ (parseInt(tmpp[13]) & 0x01) );
                 adapter.log.debug('LowBattery   : '+ ((parseInt(tmpp[13]) & 0x04) >> 2) ); 
                 // Werte schreiben
@@ -1523,7 +1544,7 @@ function logLaCrosseWS(data){
                 adapter.setState('LaCrosseWS_'+ array[0].usid +'.lowBatt', {val: ((parseInt(tmpp[13]) & 0x04) >> 2), ack: true});
                 adapter.setState('LaCrosseWS_'+ array[0].usid +'.newBatt', {val: ((parseInt(tmpp[13]) & 0x01) ), ack: true});
                 //absolute Feuchte und Taupunkt
-		if ( ((parseInt(tmpp[2])) !== 255) && ((parseInt(tmpp[4])) !== 255) ) {
+        if ( ((parseInt(tmpp[2])) !== 255) && ((parseInt(tmpp[4])) !== 255) ) {
                 var temp = ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10);
                 var rel = ((parseInt(tmpp[4]))*1) ;
                 var vappress =rel/100 * 6.1078 * Math.exp(((7.5*temp)/(237.3+temp))/Math.LOG10E);
@@ -1532,7 +1553,7 @@ function logLaCrosseWS(data){
                 var habs = 1000 * 18.016 / 8314.3 * 100*vappress/(273.15 + temp );
                 adapter.setState('LaCrosseWS_'+ array[0].usid +'.abshumid',   {val: round(habs, 1), ack: true});
                 adapter.setState('LaCrosseWS_'+ array[0].usid +'.dewpoint',   {val: round(dewp, 1), ack: true});
-	    	} else {adapter.log.debug('WS no dewpoint calculation ');}
+            } else {adapter.log.debug('WS no dewpoint calculation ');}
             }
         }
     }
@@ -1789,7 +1810,7 @@ function logLaCrosseBMP180(data) {
     }
 }
 
-
+//OK VALUES LGW 1416620 UpTimeSeconds=111283,UpTimeText=1Tg. 6Std. 54Min. 43Sek. ,WIFI=FRITZ!Box 7590 BE,ReceivedFrames=7314,FramesPerMinute=9,RSSI=-69,FreeHeap=27648,LD.Min=0.51,LD.Avg=0.56,LD.Max=14.92,OLED=none
 function logValue(data) {
     var tmp = data.split(',');
     adapter.log.debug('logValue: ' + tmp);
@@ -1829,7 +1850,7 @@ function main() {
 
     // The adapters config (in the instance object everything under the attribute "native") is accessible via
     // adapter.config:
-	adapter.log.debug('start of main');
+    adapter.log.debug('start of main');
     var obj = adapter.config.sensors;
     defineLaCrosseGW();
 
@@ -1855,78 +1876,165 @@ function main() {
         if(obj[anz].stype=="LaCrosseWS"){
             defineLaCrosseWS(obj[anz].usid, obj[anz].name);
         }
-	if(obj[anz].stype=="EC3000"){
+    if(obj[anz].stype=="EC3000"){
             defineEC3000(obj[anz].usid, obj[anz].name);
         }
         if(obj[anz].stype=="EMT7110"){
             defineEMT7110(obj[anz].usid, obj[anz].name);
         }
-	if(obj[anz].stype=="level"){
+    if(obj[anz].stype=="level"){
             defineLevel(obj[anz].usid, obj[anz].name);
         }
     }
 
-    var options = {
-        clientPort:   parseInt(adapter.config.ipport)
-    };
+    var socket = new net.Socket();
 
-	adapter.log.debug('configured IP address : ' + adapter.config.ipaddress );
-	adapter.log.debug('configured IP port : ' + adapter.config.ipport );
-    //adapter.log.debug('options : ' + JSON.stringify(options) );	
-    const client = new TcpClient.Socket();
-    	//const client = new net.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
-    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
-        adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
-        client.setEncoding('utf-8');
+
+    // var options = {
+    //     clientPort:   parseInt(adapter.config.ipport)
+    // };
+
+    adapter.log.debug('configured IP address : ' + adapter.config.ipaddress );
+    adapter.log.debug('configured IP port : ' + adapter.config.ipport );
+    //adapter.log.debug('options : ' + JSON.stringify(options) );
+
+    socket.connect (adapter.config.ipport, adapter.config.ipaddress, function() {
+        socket.setEncoding('utf-8');
+        adapter.log.debug('CONNECTED TO: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+        // Write a message to the socket as soon as the client is connected, the server will   receive it as message from the client 
+        adapter.log.debug('Sending message');
+
+        if (adapter.config.command_en) {
+            setTimeout(socket.write(adapter.config.command# '\r\n'), 500); //0,5s Verzögerung
+        }
+
+        // socket.write('20000#1r\r\n');       
     });
 
-    client.on('error',function(error){
+    // const client = new TcpClient.Socket();
+    //     //const client = new net.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
+    // client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+    //     adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+    //     client.setEncoding('utf-8');
+    // });
+
+    socket.on('error', function(exception){
         adapter.log.info('failed to open: ' + error);
-        console.log('usb open error' + error);
-    });
-    
-    client.on('data', function(data) {
-                //var data1 = data.toString();
-                adapter.log.debug(' 0 - data received: ' + data) ;
-		        console.log('recv data = '+ data) ;
-                if ( data.startsWith('H0')){
-                    logHMS100TF(data);
-                }
-                else {
-                    var tmp = data.split(' ');
-                    if(tmp[0]==='OK'){
-                        if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
-                            logLaCrosseDTH(data);
-                            }
-	                    else if (tmp[1]=== '22'){ //22 ist fix für EC3000
-                            logEC3000(data);
-                            }
-                        else if (tmp[1]=== 'EMT7110'){ // EMT7110 ist fix für EMT7110
-                            logEMT7110(data);
-                            }
-			            else if (tmp[1]=== 'LS'){ // LS fix für level
-                            logLevel(data);
-                            }
-                        else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
-                            logLaCrosseBMP180(data);
-                            logLaCrosseBME280(data);
-                            logLaCrosseWS(data);
-                            }
-                        else if (tmp[1] === 'VALUES') { //OK Values
-                            adapter.log.debug(tmp);
-                            logValue(data);
-                        }
-                        else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
-                            logemonTH(data);
-                            logemonWater(data);
-                        }
-                    } 
-                }
+        adapter.log.debug('Exception:');
+        adapter.log.debug(exception);
     });
 
-    if (adapter.config.command_en) {
-        setTimeout(write_cmd(adapter.config.command), 1500); //1,5s Verzögerung
-    }
+
+    // client.on('error',function(error){
+    //     adapter.log.info('failed to open: ' + error);
+    //     console.log('usb open error' + error);
+    // });
+    
+        // Add a 'data' event handler for the client socket
+    // data is what the server sent to this socket
+    socket.on('data', function(data) {        
+        if (data != ''){
+            adapter.log.debug('DATA: ' + data);
+            if (data.startsWith('H0')){
+                logHMS100TF(data);
+            }
+            else{
+                var tmp = data.split(' ');
+                if(tmp[0]==='OK'){
+                    if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
+                        logLaCrosseDTH(data);
+                    }
+                    else if (tmp[1]=== '22'){ //22 ist fix für EC3000
+                        logEC3000(data);
+                    }
+                    else if (tmp[1]=== 'EMT7110'){ // EMT7110 ist fix für EMT7110
+                        logEMT7110(data);
+                    }
+                    else if (tmp[1]=== 'LS'){ // LS fix für level
+                        logLevel(data);
+                    }
+                    else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
+                        logLaCrosseBMP180(data);
+                        logLaCrosseBME280(data);
+                        logLaCrosseWS(data);
+                    }
+                    else if (tmp[1] === 'VALUES') { //OK Values
+                        adapter.log.debug(tmp);
+                        logValue(data);
+                    }
+                    else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
+                        logemonTH(data);
+                        logemonWater(data);
+                    }
+                } 
+            }
+        }
+    });
+
+    socket.on('error', function(exception){
+        adapter.log.info('failed to open: ' + error);
+        adapter.log.debug('Exception:');
+        adapter.log.debug(exception);
+    });
+
+
+    socket.on('drain', function() {
+        adapter.log.debug("drain!");
+    });
+
+    socket.on('timeout', function() {
+        adapter.log.debug("timeout!");
+    });
+
+    // Add a 'close' event handler for the client socket
+    socket.on('close', function() {
+        adapter.log.debug('Connection closed');
+    });
+
+            
+
+    // client.on('data', function(data) {
+    //             //var data1 = data.toString();
+    //             adapter.log.debug(' 0 - data received: ' + data) ;
+    //             console.log('recv data = '+ data) ;
+    //             if ( data.startsWith('H0')){
+    //                 logHMS100TF(data);
+    //             }
+    //             else {
+    //                 var tmp = data.split(' ');
+    //                 if(tmp[0]==='OK'){
+    //                     if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
+    //                         logLaCrosseDTH(data);
+    //                         }
+    //                     else if (tmp[1]=== '22'){ //22 ist fix für EC3000
+    //                         logEC3000(data);
+    //                         }
+    //                     else if (tmp[1]=== 'EMT7110'){ // EMT7110 ist fix für EMT7110
+    //                         logEMT7110(data);
+    //                         }
+    //                     else if (tmp[1]=== 'LS'){ // LS fix für level
+    //                         logLevel(data);
+    //                         }
+    //                     else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
+    //                         logLaCrosseBMP180(data);
+    //                         logLaCrosseBME280(data);
+    //                         logLaCrosseWS(data);
+    //                         }
+    //                     else if (tmp[1] === 'VALUES') { //OK Values
+    //                         adapter.log.debug(tmp);
+    //                         logValue(data);
+    //                     }
+    //                     else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
+    //                         logemonTH(data);
+    //                         logemonWater(data);
+    //                     }
+    //                 } 
+    //             }
+    // });
+
+    // if (adapter.config.command_en) {
+    //     setTimeout(write_cmd(adapter.config.command), 1500); //1,5s Verzögerung
+    // }
     
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
@@ -1939,12 +2047,18 @@ function main() {
         if (timer) clearTimeout(timer);
         timer = setTimeout(function () {
             adapter.log.error('Verbund zum LGW unterbrochen');
-            client.end(function (end) {
+            // client.end(function (end) {
+            socket.end(function (end) {
                 adapter.log.debug('closed...');
                 timer2 = setTimeout(function () {
-                    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+                    socket.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+                        adapter.log.debug('Reconnecting');
                         adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
-                        client.setEncoding('utf-8');
+                        socket.setEncoding('utf-8');
+
+                    // client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+                    //     adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+                    //     client.setEncoding('utf-8');
                     });
                 }, 15000); // 15 Sekunden warten bis open
             });
