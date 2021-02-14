@@ -20,7 +20,6 @@
                 'LaCrosseDTH',
                 'LaCrosseDTT',
                 'LaCrosseBMP180',
-                'LaCrosseBME280',
                 'HMS100TF',
                 'LaCrosseWS',
                 'EC3000',
@@ -55,9 +54,9 @@
             }
             values2table('values', sensors, onChange);
             /**
-            socket.emit('subscribeObjects',  'lacrossegateway.' + instance + '.*');
-            socket.emit('subscribeStates',  'lacrossegateway.' + instance + '.*');
-            socket.emit('getState', 'lacrossegateway.' + instance + '.foundDevices.val', function (err, state) {
+            socket.emit('subscribeObjects',  'jeelink.' + instance + '.*');
+            socket.emit('subscribeStates',  'jeelink.' + instance + '.*');
+            socket.emit('getState', 'jeelink.' + instance + '.foundDevices.val', function (err, state) {
                 console.log("got the following config : "+ JSON.stringify(state));
                         if (!err) {
                             showMessage("new devices found " +JSON.stringify(state) );
@@ -136,19 +135,19 @@
         <div class="section">
             <div class="row">
                 <div class="col s12">
-                    <h6 class="translate sub-title">Lacrossegateway Settings</h6>
+                    <h6 class="translate sub-title">Jeelink Settings</h6>
                 </div>
                 <div class="col s6">
-                    <input class="value" id="host" />
-                    <label for="ipaddress" class="translate">Hostname or IP address</label>
-                    <p>lgw.domain.com | 192.168.100.100</p>
+                    <input class="value" id="serialport" />
+                    <label for="serialport" class="translate">Serial port</label>
+                    <p>/dev/ttyUSB0 or /dev/ttyACME0</p>
                     </td>
                     <!-- Important: label must come directly after input. Label is important. -->
                 </div>
                 <div class="col s6">
-                    <input class="value" id="port" />
-                    <label for="ipport" class="translate">Port</label>
-                    <p>usually 81</p>
+                    <input class="value" id="baudrate" />
+                    <label for="baudrate" class="translate">Baud rate</label>
+                    <p>usually 57600</p>
                     <!-- Important: label must come directly after input. Label is important. -->
                 </div>
             </div>
@@ -157,13 +156,19 @@
         <div class="section">
             <div class="row">
                 <div class="col s12">
-                    <h6 class="translate sub-title">Init Command</h6>
+                    <h6 class="translate sub-title">Jeelink Command (trial)</h6>
                 </div>
                 <div class="col s6">
                     <input class="value string" id="command" />
-                    <label for="command" class="translate">Init command for mode setup</label>
-                    <p>0a 20000#1r v</p>
+                    <label for="command" class="translate">command for stick setup</label>
+                    <p>usually empty</p>
                     <!-- Important: label must come directly after input. Label is important. -->
+                </div>
+                <div class="col s6">
+                    <input class="value" id="command_en" type="checkbox" />
+                    <span class="translate">enable command</span>
+                    <p>usually empty</p>
+                    <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
                 </div>
             </div>
         </div>
@@ -173,7 +178,7 @@
                 <div class="col s12">
                     <h6 class="translate sub-title">Sensor configuration</h6>
                     <p class="translate">valid sensor types:</p>
-                    <p> emonTH, emonWater, LaCrosseDTH, LaCrosseDTT, LaCrosseBMP180, LaCrosseBME280, HMS100T, LaCrosseWS, EC3000, EMT7110, level</p>
+                    <p> emonTH, emonWater, LaCrosseDTH, LaCrosseDTT, LaCrosseBMP180, HMS100T, LaCrosseWS, EC3000, EMT7110, level</p>
                 </div>
             </div>
             <div class="col s12" id="values">
@@ -196,9 +201,7 @@
                             <tr>
                                 <th data-name="_index" style="width: 40px" class="translate"></th>
                                 <th data-name="sid" style="width: 40px" class="translate">id</th>
-                                <th data-name="stype" style="width: 150px" class="translate"
-                                    data-options="emonTH;emonWater;LaCrosseDTH;LaCrosseDTT;LaCrosseBMP180;LaCrosseBME280;HMS100TF;LaCrosseWS;EC3000;EMT7110;level"
-                                    data-type="select">type</th>
+                                <th data-name="stype" style="width: 150px" class="translate" data-options="emonTH;emonWater;LaCrosseDTH;LaCrosseDTT;LaCrosseBMP180;HMS100TF;LaCrosseWS;EC3000;EMT7110;level" data-type="select">type</th>
                                 <th data-name="usid" style="width: 50px" class="translate">uid</th>
                                 <th data-name="name" style="width: 200px" class="translate">name</th>
                                 <th data-buttons="delete" style="width: 40px" class="translate">delete</th>

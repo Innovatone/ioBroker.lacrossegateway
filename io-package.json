@@ -1,20 +1,8 @@
 {
     "common": {
-        "name": "lacrossegateway",
-        "version": "0.2.0",
+        "name": "jeelink",
+        "version": "0.1.3",
         "news": {
-            "0.2.0": {
-                "en": "first development release using LaCrosseGateway",
-                "de": "Erste Entwicklungsfreigabe für LaCrosseGateway",
-                "ru": "новый датчик с двойной температурой",
-                "pt": "novo sensor com dupla temperatura",
-                "nl": "nieuwe sensor met dubbele temp",
-                "fr": "nouveau capteur à double temp",
-                "it": "nuovo sensore con doppia temperatura",
-                "es": "nuevo sensor con doble temperatura",
-                "pl": "nowy czujnik z podwójną temperaturą",
-                "zh-cn": "新型双温传感器"
-            },
           "0.1.3": {
                 "en": "new sensor with double temp",
                 "de": "neuer Sensor mit Doppeltemp",
@@ -119,20 +107,20 @@
                 "pl": "Dodano LaCrosseBMP180, adminv3"
               }
         },
-        "title": "lacrossegateway",
+        "title": "jeelink",
         "titleLang": {
-            "en": "LacrosseGateway adapter",
-            "de": "LacrosseGateway-Adapter",
+            "en": "jeelink adapter",
+            "de": "Jeelink-Adapter",
             "ru": "адаптер для хэндлинка",
-            "pt": "adaptador LacrosseGateway",
-            "nl": "LacrosseGateway adapter",
+            "pt": "adaptador jeelink",
+            "nl": "jeelink adapter",
             "fr": "adaptateur de joncteur",
-            "it": "adattatore LacrosseGateway",
-            "es": "adaptador LacrosseGateway",
-            "pl": "Przystawka LacrosseGateway"
+            "it": "adattatore jeelink",
+            "es": "adaptador jeelink",
+            "pl": "Przystawka JELINK"
         },
         "desc": {
-            "en": "read 868Mhz sensors of Technoline, emonTH, Lacrosse",
+            "en": "read 868Mhz sensors of Technoline, emonTH, Lacrosse ",
             "de": "Einlesen der 868Mhz Sensoren von Technoline, emonTH, Lacrosse",
             "ru": "читать 868 МГц датчики Technoline, emonTH, Lacrosse",
             "pt": "read 868Mhz sensors of Technoline, emonTH, Lacrosse",
@@ -146,35 +134,51 @@
         "mode": "daemon",
         "license": "MIT",
         "keywords": [
-            "ioBroker",
-            "Jeelink",
-            "Lacrossegateway",
-            "Lacrosse",
-            "Openenergy",
-            "RFM12B",
-            "EMT7110",
-            "Technoline",
-            "EC3000",
-            "EC3K"
-        ], 
+            "jeelink",
+            "openenergy",
+            "RFM",
+            "LaCrosse",
+            "emonTH"
+        ],
         "type": "hardware",
         "icon": "jeelab_logo.png",
-        "extIcon": "https://raw.githubusercontent.com/Innovatone/ioBroker.lacrossegateway/master/admin/jeelab_logo.png",
-        "readme": "https://github.com/Innovatone/ioBroker.lacrossegateway/blob/master/README.md",
+        "extIcon": "https://raw.githubusercontent.com/foxthefox/ioBroker.jeelink/master/admin/jeelab_logo.png",
+        "readme": "https://github.com/foxthefox/ioBroker.jeelink/blob/master/README.md",
         "loglevel": "debug",
         "materialize": true,
         "compact": true,
         "authors": [
             {
-                "name": "Innovatone",
-                "email": "innovatone@gmail.com"
+                "name": "foxthefox",
+                "email": "foxthefox@wysiwis.net"
             }
         ]
     },
     "native": {
-        "host": "lgw.domain.com",
-        "port": 81,
+        "serialport": "/dev/ttyUSB0",
+        "baudrate": 57600,
         "command": "",
+        "command_en": false,
+        "sensors": [
+            {
+                "sid": "18",
+                "usid": "1",
+                "stype": "emonTH",
+                "name": "example emonTH"
+            },
+            {
+                "sid": "0",
+                "usid": "2",
+                "stype": "LaCrosseBMP180",
+                "name": "example superjee"
+            },
+            {
+                "sid": "55",
+                "usid": "3",
+                "stype": "LaCrosseDTH",
+                "name": "example LaCrosseDTH"
+            }
+        ]
     },
     "objects": [],
     "instanceObjects": [
@@ -196,8 +200,7 @@
                 "role": "list",
                 "read": true,
                 "write": true,
-                "desc": "new Devices",
-                "localLink": "http://%host%:%port%"
+                "desc": "new Devices"
             },
             "native": {}
         }
