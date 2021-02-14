@@ -196,10 +196,9 @@
         ]
     },
     "native": {
-        "ipaddress": "192.168.2.206",
+        "ipaddress": "lgw.domain.com",
         "ipport": 81,
         "command": "",
-        "command_en": false,
         "sensors": [
             {
                 "sid": "18",
