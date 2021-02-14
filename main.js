@@ -2,15 +2,20 @@
 /*jslint node: true */
 "use strict";
 
-const SerialPort = require("serialport");
-const Readline = SerialPort.parsers.Readline;
-var sp = null;
+//const SerialPort = require("serialport");
+//const Readline = SerialPort.parsers.Readline;
+const TcpClient = require("net");
+var client = null;
+
+var timer = null;
+var timer2 = null;
 
 // you have to require the utils module and call adapter function
 const utils =  require('@iobroker/adapter-core'); // Get common adapter utils
 
 
 // you have to call the adapter function and pass a options object
+//
 // name has to be set and has to be equal to adapters folder name and main file name excluding extension
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.template.0
 
@@ -18,7 +23,7 @@ let adapter;
 function startAdapter(options) {
      options = options || {};
      Object.assign(options, {
-          name: 'jeelink',
+          name: 'lacrossegateway',
           // is called when adapter shuts down - callback has to be called under any circumstances!
           unload: function (callback) {
             try {
@@ -31,18 +36,19 @@ function startAdapter(options) {
         // is called if a subscribed object changes
         objectChange: function (id, obj) {
             // Warning, obj can be null if it was deleted
-            adapter.log.info('objectChange ' + id + ' ' + JSON.stringify(obj));
+            adapter.log.debug('objectChange ' + id + ' ' + JSON.stringify(obj));
         },
         // is called if a subscribed state changes
+        /*
         stateChange: function (id, state) {
             // Warning, state can be null if it was deleted
-            adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
-        
+            adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
             // you can use the ack flag to detect if it is status (true) or command (false)
             if (state && !state.ack) {
-                adapter.log.info('ack is not set!');
-            }
+                adapter.log.debug('ack is not set!');
+            };
         },
+        */
         // is called when databases are connected and adapter received configuration.
         // start here!
         ready: () => {
@@ -70,6 +76,78 @@ function round(value, digits) //digits 1 for 1 digit after comma
     return value/factor;
 }
 
+function defineLaCrosseGW() {
+    adapter.setObjectNotExists('LaCrosseGW', {
+        type: 'channel',
+        common: {
+            name: 'LaCrosseGW ',
+            role: 'gateway'
+        },
+        native: {}
+    });
+    adapter.log.info('RFM12B setting up object = LaCrosseGW');
+    adapter.setObjectNotExists('LaCrosseGW.uptimeseconds', {
+        type: 'state',
+        common: {
+            "name": "Uptime seconds",
+            "type": "number",
+            "unit": "Seconds",
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "Uptime Seconds"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosseGW.uptimetext', {
+        type: 'state',
+        common: {
+            "name": "Uptime",
+            "type": "text",
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "Uptime"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosseGW.version', {
+        type: 'state',
+        common: {
+            "name": "Version",
+            "type": "text",
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "Version"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosseGW.mac', {
+        type: 'state',
+        common: {
+            "name": "MAC",
+            "type": "text",
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "MAC"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosseGW.rssi', {
+        type: 'state',
+        common: {
+            "name": "RSSI",
+            "type": "number",
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "RSSI"
+        },
+        native: {}
+    });
+}
 
 // OK 21 XXX XXX XXX XXX XXX
 // |  |  |   |   |   |   |
@@ -1144,16 +1222,18 @@ function logLaCrosseDTH(data){
                 if (array[0].stype ===  'LaCrosseDTH') {
                     // calculate and write values for LaCrosseDTH sensors
                     adapter.setState('LaCrosse_'+ array[0].usid +'.temp', {val: ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10), ack: true});
-                    adapter.setState('LaCrosse_'+ array[0].usid +'.humid', {val: (parseInt(tmpp[4]) & 0x7f), ack: true});
-                    //absolute Feuchte und Taupunkt
-                    var temp = ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10);
-                    var rel = (parseInt(tmpp[4]) & 0x7f);
-                    var vappress =rel/100 * 6.1078 * Math.exp(((7.5*temp)/(237.3+temp))/Math.LOG10E);
-                    var v = Math.log(vappress/6.1078) * Math.LOG10E;
-                    var dewp = (237.3 * v) / (7.5 - v);
-                    var habs = 1000 * 18.016 / 8314.3 * 100*vappress/(273.15 + temp );
-                    adapter.setState('LaCrosse_'+ array[0].usid +'.abshumid',   {val: round(habs, 1), ack: true});
-                    adapter.setState('LaCrosse_'+ array[0].usid +'.dewpoint',   {val: round(dewp, 1), ack: true});
+                    if (parseInt(tmpp[4]) != 106) {
+                        adapter.setState('LaCrosse_'+ array[0].usid +'.humid', {val: (parseInt(tmpp[4]) & 0x7f), ack: true});
+                        //absolute Feuchte und Taupunkt
+                        var temp = ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10);
+                        var rel = (parseInt(tmpp[4]) & 0x7f);
+                        var vappress =rel/100 * 6.1078 * Math.exp(((7.5*temp)/(237.3+temp))/Math.LOG10E);
+                        var v = Math.log(vappress/6.1078) * Math.LOG10E;
+                        var dewp = (237.3 * v) / (7.5 - v);
+                        var habs = 1000 * 18.016 / 8314.3 * 100*vappress/(273.15 + temp );
+                        adapter.setState('LaCrosse_'+ array[0].usid +'.abshumid',   {val: round(habs, 1), ack: true});
+                        adapter.setState('LaCrosse_'+ array[0].usid +'.dewpoint',   {val: round(dewp, 1), ack: true});
+                    }
                 }
                 else if (array[0].stype ===  'LaCrosseDTT') {
                     // write temperature values for LaCrosseDTT sensors
@@ -1356,6 +1436,21 @@ function defineLaCrosseWS(id, name){
         },
         native: {}
     });
+    adapter.setObjectNotExists('LaCrosse_' + id + '.pressure', {
+        type: 'state',
+        common: {
+            "name": "air pressure",
+            "type": "number",
+            "unit": "hPa",
+            "min": 0,
+            "max": 1200,
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "air pressure"
+        },
+        native: {}
+    });
 }
 
 
@@ -1381,30 +1476,30 @@ function logLaCrosseWS(data){
             adapter.log.debug('Temperature   : no data (255)');
             } 
         else {
-                    adapter.log.debug('Temperature   : '+ ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10) ) ; // Vorzeichen fehlt noch
-                    adapter.setState('LaCrosseWS_'+ array[0].usid +'.temp',    {val: ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10), ack: true});
+            adapter.log.debug('Temperature   : '+ ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10) ) ; // Vorzeichen fehlt noch
+            adapter.setState('LaCrosseWS_'+ array[0].usid +'.temp',    {val: ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10), ack: true});
             }
         if  ((parseInt(tmpp[4])) === 255){
             adapter.log.debug('Humidty   : no data (255)');
             } 
         else {
-                    adapter.log.debug('Humidty      : '+ ((parseInt(tmpp[4]))*1) );
+            adapter.log.debug('Humidty      : '+ ((parseInt(tmpp[4]))*1) );
             adapter.setState('LaCrosseWS_'+ array[0].usid +'.humid',   {val: ((parseInt(tmpp[4])*1)), ack: true});    
         }
         if  ((parseInt(tmpp[5])) === 255){
             adapter.log.debug('Rain   : no data (255)');
             }
         else {
-                    adapter.log.debug('Rain         : '+ ((((parseInt(tmpp[5]))*256)+(parseInt(tmpp[6])))/2) );
+            adapter.log.debug('Rain         : '+ ((((parseInt(tmpp[5]))*256)+(parseInt(tmpp[6])))/2) );
             adapter.setState('LaCrosseWS_'+ array[0].usid +'.rain',    {val: ((((parseInt(tmpp[5]))*256)+(parseInt(tmpp[6])))/2), ack: true});
             }
         if  ((parseInt(tmpp[9])) === 255){
             adapter.log.debug('Wind Speed   : no data (255)');
             }
         else {          
-                    adapter.log.debug('WindSpeed    : '+ ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10) );
-                adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed',  {val: ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10), ack: true});
-                adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed2',  {val: round( ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10)*3.6, 2), ack: true});
+            adapter.log.debug('WindSpeed    : '+ ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10) );
+            adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed',  {val: ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10), ack: true});
+            adapter.setState('LaCrosseWS_'+ array[0].usid +'.wspeed2',  {val: round( ((((parseInt(tmpp[9]))*256)+(parseInt(tmpp[10])))/10)*3.6, 2), ack: true});
 
         }
         if  ((parseInt(tmpp[7])) === 255){
@@ -1442,6 +1537,157 @@ function logLaCrosseWS(data){
         }
     }
 }
+
+// superjee LaCrosse mit BME280
+// OK WS 0 2    4  212 255 255 255 255 255 255 255 255 255 0   3   241  ID=0 T:23,6 Druck 1009 hPa
+// OK WS 0 XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |   |   |   |   | --- [18] Druck LSB
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |   |   |   |-------- [17] Druck MSB
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |   |   |------------ [16] Flags ?
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |   | --------------- [15]
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |-------------------- [14]
+// |  |  |  |   |   |   |   |   |   |   |   |   |   |-------------------- [13]
+// |  |  |  |   |   |   |   |   |   |   |   |   |------------------------ [12]
+// |  |  |  |   |   |   |   |   |   |   |   |---------------------------- [11]
+// |  |  |  |   |   |   |   |   |   |   |-------------------------------- [10]
+// |  |  |  |   |   |   |   |   |   |------------------------------------ [9]
+// |  |  |  |   |   |   |   |   |---------------------------------------- [8]
+// |  |  |  |   |   |   |   |-------------------------------------------- [7]
+// |  |  |  |   |   |   |------------------------------------------------ [6]
+// |  |  |  |   |   |---------------------------------------------------- [5]Temp * 10 + 1000 LSB
+// |  |  |  |   |-------------------------------------------------------- [4]Temp * 10 + 1000 MSB
+// |  |  |  |------------------------------------------------------------ [3]Sensor type 2 fix
+// |  |  |--------------------------------------------------------------- [2]Sensor ID=0 fix
+// |  |------------------------------------------------------------------ [1]fix "WS"
+// |--------------------------------------------------------------------- [0]fix "OK"
+
+function defineLaCrosseBME280(id, name) {
+    adapter.setObjectNotExists('LaCrosse_' + id, {
+        type: 'channel',
+        common: {
+            name: name,
+            role: 'sensor'
+        },
+        native: {
+            "addr": id
+        }
+    });
+    adapter.log.info('RFM12B setting up object = LaCrosse ' + id);
+
+    adapter.setObjectNotExists('LaCrosse_' + id + '.temp', {
+        type: 'state',
+        common: {
+            "name": "Temperature",
+            "type": "number",
+            "unit": "°C",
+            "min": -50,
+            "max": 50,
+            "read": true,
+            "write": false,
+            "role": "value.temperature",
+            "desc": "Temperature"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosse_' + id + '.humid', {
+        type: 'state',
+        common: {
+            "name": "Humidity",
+            "type": "number",
+            "unit": "%",
+            "min": 0,
+            "max": 100,
+            "read": true,
+            "write": false,
+            "role": "value.humidity",
+            "desc": "Humidity"
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosse_' + id + '.abshumid', {
+        type: 'state',
+        common: {
+            "name": "abs Humidity",
+            "type": "number",
+            "unit": "g/m3",
+            "min": 0,
+            "max": 100,
+            "read": true,
+            "write": false,
+            "role": "value.humidity",
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosse_' + id + '.dewpoint', {
+        type: 'state',
+        common: {
+            "name": "Dewpoint",
+            "type": "number",
+            "unit": "°C",
+            "min": -50,
+            "max": 50,
+            "read": true,
+            "write": false,
+            "role": "value.temperature",
+        },
+        native: {}
+    });
+    adapter.setObjectNotExists('LaCrosse_' + id + '.pressure', {
+        type: 'state',
+        common: {
+            "name": "air pressure",
+            "type": "number",
+            "unit": "hPa",
+            "min": 0,
+            "max": 1200,
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "air pressure"
+        },
+        native: {}
+    });
+}
+
+function logLaCrosseBME280(data) {
+    var tmp = data.split(' ');
+    if (tmp[0] === 'OK') {                      // Wenn ein Datensatz sauber gelesen wurde
+        if (tmp[1] == 'WS') {                    // Für jeden Datensatz mit dem fixen Eintrag WS
+            // somit werden alle SenderIDs bearbeitet
+            var tmpp = tmp.splice(2, 18);       // es werden die vorderen Blöcke (0,1) entfernt
+            adapter.log.debug('splice       : ' + tmpp);
+
+            var array = getConfigObjects(adapter.config.sensors, 'sid', parseInt(tmpp[0]));
+            if (array.length === 0 || array.length !== 1) {
+                adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter or not unique received address');
+            }
+            else if (array[0].stype !== 'LaCrosseBME280') {
+                adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter as LaCrosseBME280');
+            }
+            else if (array[0].usid != 'nodef') {
+                adapter.log.debug('Sensor ID    : ' + (parseInt(tmpp[0])));
+                adapter.log.debug('Type         : ' + (parseInt(tmpp[1])));
+                adapter.log.debug('Temperatur   : ' + ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10));
+                adapter.log.debug('Humidty      : ' + ((parseInt(tmpp[4])) * 1));
+                adapter.log.debug('Pressure      : ' + (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))));
+                // Werte schreiben
+                // aus gesendeter ID die unique ID bestimmen
+                var temp = ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10);
+                var rel = (parseInt(tmpp[4]) & 0x7f);
+                var vappress = rel / 100 * 6.1078 * Math.exp(((7.5 * temp) / (237.3 + temp)) / Math.LOG10E);
+                var v = Math.log(vappress / 6.1078) * Math.LOG10E;
+                var dewp = (237.3 * v) / (7.5 - v);
+                var habs = 1000 * 18.016 / 8314.3 * 100 * vappress / (273.15 + temp);
+                adapter.setState('LaCrosse_' + array[0].usid + '.abshumid', { val: round(habs, 1), ack: true });
+                adapter.setState('LaCrosse_' + array[0].usid + '.dewpoint', { val: round(dewp, 1), ack: true });
+                adapter.setState('LaCrosse_' + array[0].usid + '.humid', { val: ((parseInt(tmpp[4]) * 1)), ack: true }); 
+                adapter.setState('LaCrosse_' + array[0].usid + '.temp', { val: ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10), ack: true });
+                adapter.setState('LaCrosse_' + array[0].usid + '.pressure', { val: (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))), ack: true });
+            }
+        }
+    }
+}
+
 // superjee LaCrosse mit BMP180
 // OK WS 0 2    4  212 255 255 255 255 255 255 255 255 255 0   3   241  ID=0 T:23,6 Druck 1009 hPa
 // OK WS 0 XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
@@ -1465,7 +1711,7 @@ function logLaCrosseWS(data){
 // |  |------------------------------------------------------------------ [1]fix "WS"
 // |--------------------------------------------------------------------- [0]fix "OK"
 
-function defineLaCrosseBMP180(id, name){    
+function defineLaCrosseBMP180(id, name) {
     adapter.setObjectNotExists('LaCrosse_' + id, {
         type: 'channel',
         common: {
@@ -1481,64 +1727,93 @@ function defineLaCrosseBMP180(id, name){
     adapter.setObjectNotExists('LaCrosse_' + id + '.temp', {
         type: 'state',
         common: {
-            "name":     "Temperature",
-            "type":     "number",
-            "unit":     "°C",
-            "min":      -50,
-            "max":      50,
-            "read":     true,
-            "write":    false,
-            "role":     "value.temperature",
-            "desc":     "Temperature"
+            "name": "Temperature",
+            "type": "number",
+            "unit": "°C",
+            "min": -50,
+            "max": 50,
+            "read": true,
+            "write": false,
+            "role": "value.temperature",
+            "desc": "Temperature"
         },
         native: {}
     });
     adapter.setObjectNotExists('LaCrosse_' + id + '.pressure', {
         type: 'state',
         common: {
-            "name":     "air pressure",
-            "type":     "number",
-            "unit":     "hPa",
-            "min":      0,
-            "max":      1200,
-            "read":     true,
-            "write":    false,
-            "role":     "value",
-            "desc":     "air pressure"
+            "name": "air pressure",
+            "type": "number",
+            "unit": "hPa",
+            "min": 0,
+            "max": 1200,
+            "read": true,
+            "write": false,
+            "role": "value",
+            "desc": "air pressure"
         },
         native: {}
     });
 }
 
-function logLaCrosseBMP180(data){
+
+
+function logLaCrosseBMP180(data) {
     var tmp = data.split(' ');
-    if(tmp[0]==='OK'){                      // Wenn ein Datensatz sauber gelesen wurde
-        if(tmp[1]=='WS'){                    // Für jeden Datensatz mit dem fixen Eintrag WS
+    if (tmp[0] === 'OK') {                      // Wenn ein Datensatz sauber gelesen wurde
+        if (tmp[1] == 'WS') {                    // Für jeden Datensatz mit dem fixen Eintrag WS
             // somit werden alle SenderIDs bearbeitet
-            var tmpp=tmp.splice(2,18);       // es werden die vorderen Blöcke (0,1) entfernt
-            adapter.log.debug('splice       : '+ tmpp);
-            
-            var array=getConfigObjects(adapter.config.sensors, 'sid', parseInt(tmpp[0]));
+            var tmpp = tmp.splice(2, 18);       // es werden die vorderen Blöcke (0,1) entfernt
+            adapter.log.debug('splice       : ' + tmpp);
+
+            var array = getConfigObjects(adapter.config.sensors, 'sid', parseInt(tmpp[0]));
             if (array.length === 0 || array.length !== 1) {
                 adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter or not unique received address');
             }
-            else if (array[0].stype !==  'LaCrosseBMP180'){
+            else if (array[0].stype !== 'LaCrosseBMP180') {
                 adapter.log.debug('received ID :' + parseInt(tmpp[0]) + ' is not defined in the adapter as LaCrosseBMP180');
             }
-            else if (array[0].usid != 'nodef'){
-                adapter.log.debug('Sensor ID    : '+ (parseInt(tmpp[0])) );
-                adapter.log.debug('Type         : '+ (parseInt(tmpp[1])) );
-                adapter.log.debug('Temperatur   : '+ ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10) );
-                adapter.log.debug('Pressure      : '+ (((parseInt(tmpp[14]))*256)+(parseInt(tmpp[15]))) );
+            else if (array[0].usid != 'nodef') {
+                adapter.log.debug('Sensor ID    : ' + (parseInt(tmpp[0])));
+                adapter.log.debug('Type         : ' + (parseInt(tmpp[1])));
+                adapter.log.debug('Temperatur   : ' + ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10));
+                //adapter.log.debug('Humidty      : ' + ((parseInt(tmpp[4])) * 1));
+                adapter.log.debug('Pressure      : ' + (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))));
                 // Werte schreiben
                 // aus gesendeter ID die unique ID bestimmen
-                adapter.setState('LaCrosse_'+ array[0].usid +'.temp',    {val: ((((parseInt(tmpp[2]))*256)+(parseInt(tmpp[3]))-1000)/10), ack: true});
-                adapter.setState('LaCrosse_'+ array[0].usid +'.pressure',   {val: (((parseInt(tmpp[14]))*256)+(parseInt(tmpp[15]))), ack: true});                
+                //adapter.setState('LaCrosse_' + array[0].usid + '.humid', { val: (parseInt(tmpp[4]) * 1), ack: true });
+                adapter.setState('LaCrosse_' + array[0].usid + '.temp', { val: ((((parseInt(tmpp[2])) * 256) + (parseInt(tmpp[3])) - 1000) / 10), ack: true });
+                adapter.setState('LaCrosse_' + array[0].usid + '.pressure', { val: (((parseInt(tmpp[14])) * 256) + (parseInt(tmpp[15]))), ack: true });
             }
         }
     }
 }
 
+
+function logValue(data) {
+    var tmp = data.split(',');
+    adapter.log.debug('logValue: ' + tmp);
+    let len = tmp.length;
+    let i;
+    for (i=0; i < len; i++) {
+        if (tmp[i].search(/MacAddress/) != -1) {
+            var mac = tmp[i].split('=');
+            adapter.setState('LaCrosseGW.mac', { val: mac[1], ack: true });
+        };
+        if (tmp[i].search(/Version/) != -1) {
+            var version = tmp[i].split('=');
+            adapter.setState('LaCrosseGW.version', { val: version[1], ack: true });
+        };
+        if (tmp[i].search(/RSSI/) != -1) {
+            var rssi = tmp[i].split('=');
+            adapter.setState('LaCrosseGW.rssi', { val: rssi[1], ack: true });
+        };
+    };
+    var uptimeseconds = tmp[0].split('=');
+    var uptime = tmp[1].split('=');
+    adapter.setState('LaCrosseGW.uptimeseconds', { val: parseInt(uptimeseconds[1]), ack: true } );
+    adapter.setState('LaCrosseGW.uptimetext', { val: uptime[1], ack: true });
+}
 
 function write_cmd(command){
 
@@ -1556,6 +1831,8 @@ function main() {
     // adapter.config:
     adapter.log.debug('start of main');
     var obj = adapter.config.sensors;
+    defineLaCrosseGW();
+
     for (var anz in obj){
         if(obj[anz].stype=="emonTH") {
             defineemonTH(obj[anz].usid, obj[anz].name );
@@ -1568,6 +1845,9 @@ function main() {
         }else 
         if(obj[anz].stype=="LaCrosseBMP180"){
             defineLaCrosseBMP180(obj[anz].usid, obj[anz].name);
+        }
+        if (obj[anz].stype == "LaCrosseBME280") {
+            defineLaCrosseBME280(obj[anz].usid, obj[anz].name);
         }
         if(obj[anz].stype=="HMS100TF"){
             defineHMS100TF(obj[anz].usid, obj[anz].name);
@@ -1587,24 +1867,28 @@ function main() {
     }
 
     var options = {
-        baudRate:   parseInt(adapter.config.baudrate)   || parseInt(57600)
+        clientPort:   parseInt(adapter.config.ipport)
     };
-    adapter.log.debug('configured port : ' + adapter.config.serialport );
-    adapter.log.debug('configured baudrate : ' + adapter.config.baudrate );
-    adapter.log.debug('options : ' + JSON.stringify(options) ); 
-        const sp = new SerialPort(adapter.config.serialport || '/dev/ttyUSB0', options, function (error) {
-        if ( error ) {
-            adapter.log.info('failed to open: '+error);
-        console.log('usb open error'+error);
-        } else {
-            adapter.log.info('open');
-        const parser = sp.pipe(new Readline({ delimiter: '\r\n' }));
-        //const parser = new Readline({ delimiter: '\r\n' });
-        //sp.pipe(parser);
-            parser.on('data', function(data) {
 
-                adapter.log.info('data received: ' + data);
-        console.log('recv data = '+ data);
+    adapter.log.debug('configured IP address : ' + adapter.config.ipaddress );
+    adapter.log.debug('configured IP port : ' + adapter.config.ipport );
+    //adapter.log.debug('options : ' + JSON.stringify(options) );   
+    const client = new TcpClient.Socket();
+        //const client = new net.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
+    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+        adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+        client.setEncoding('utf-8');
+    });
+
+    client.on('error',function(error){
+        adapter.log.info('failed to open: ' + error);
+        console.log('usb open error' + error);
+    });
+    
+    client.on('data', function(data) {
+                //var data1 = data.toString();
+                adapter.log.debug(' 0 - data received: ' + data) ;
+                console.log('recv data = '+ data) ;
                 if ( data.startsWith('H0')){
                     logHMS100TF(data);
                 }
@@ -1612,41 +1896,60 @@ function main() {
                     var tmp = data.split(' ');
                     if(tmp[0]==='OK'){
                         if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
-                           logLaCrosseDTH(data);
-                        }
-                    else if (tmp[1]=== '22'){ //22 ist fix für EC3000
+                            logLaCrosseDTH(data);
+                            }
+                        else if (tmp[1]=== '22'){ //22 ist fix für EC3000
                             logEC3000(data);
-                         }
+                            }
                         else if (tmp[1]=== 'EMT7110'){ // EMT7110 ist fix für EMT7110
                             logEMT7110(data);
-                         }
-             else if (tmp[1]=== 'LS'){ // LS fix für level
+                            }
+                        else if (tmp[1]=== 'LS'){ // LS fix für level
                             logLevel(data);
-                         }
-                         else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
-                           logLaCrosseBMP180(data);
-                           logLaCrosseWS(data);
-                         }
-                        else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
-                                logemonTH(data);
-                                logemonWater(data);
+                            }
+                        else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
+                            logLaCrosseBMP180(data);
+                            logLaCrosseBME280(data);
+                            logLaCrosseWS(data);
+                            }
+                        else if (tmp[1] === 'VALUES') { //OK Values
+                            adapter.log.debug(tmp);
+                            logValue(data);
                         }
-                    }
+                        else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
+                            logemonTH(data);
+                            logemonWater(data);
+                        }
+                    } 
                 }
-
-
-            });
-        if (adapter.config.command_en) {
-                setTimeout(write_cmd(adapter.config.command) , 1500); //1,5s Verzögerung
-            }
-        }
     });
 
-
+    if (adapter.config.command_en) {
+        setTimeout(write_cmd(adapter.config.command), 1500); //1,5s Verzögerung
+    }
+    
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
-
-
+    adapter.on('stateChange', function (id, state) {
+        adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
+        // you can use the ack flag to detect if it is status (true) or command (false)
+        if (state && !state.ack) {
+            adapter.log.debug('ack is not set!');
+        };
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(function () {
+            adapter.log.error('Verbund zum LGW unterbrochen');
+            client.end(function (end) {
+                adapter.log.debug('closed...');
+                timer2 = setTimeout(function () {
+                    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
+                        adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+                        client.setEncoding('utf-8');
+                    });
+                }, 15000); // 15 Sekunden warten bis open
+            });
+        }, 120000); // 120 Sekunden auf sate change warten
+    })
 }
 
 // If started as allInOne/compact mode => return function to create instance

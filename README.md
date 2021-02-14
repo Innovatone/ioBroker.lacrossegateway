@@ -1,42 +1,39 @@
 ![Logo](admin/jeelab_logo.png)
-# ioBroker.jeelink
-![Number of Installations](http://iobroker.live/badges/jeelink-installed.svg) ![Number of Installations](http://iobroker.live/badges/jeelink-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.jeelink.svg)](https://www.npmjs.com/package/iobroker.jeelink)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.jeelink.svg)](https://www.npmjs.com/package/iobroker.jeelink)
-[![Build Status](https://travis-ci.org/foxthefox/ioBroker.jeelink.svg?branch=master)](https://travis-ci.org/foxthefox/ioBroker.jeelink)
+# ioBroker.lacrossegateway
+![Number of Installations](http://iobroker.live/badges/lacrossegateway-installed.svg) ![Number of Installations](http://iobroker.live/badges/lacrossegateway-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.lacrossegateway.svg)](https://www.npmjs.com/package/iobroker.lacrossegateway)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.lacrossegateway.svg)](https://www.npmjs.com/package/iobroker.lacrossegateway)
+[![Build Status](https://travis-ci.org/foxthefox/ioBroker.lacrossegateway.svg?branch=master)](https://travis-ci.org/foxthefox/ioBroker.lacrossegateway)
 
-[![NPM](https://nodei.co/npm/iobroker.jeelink.png?downloads=true)](https://nodei.co/npm/iobroker.jeelink/)
+[![NPM](https://nodei.co/npm/iobroker.lacrossegateway.png?downloads=true)](https://nodei.co/npm/iobroker.lacrossegateway/)
 
-This is an adapter for ioBroker to integrate RFM12B/RFM69 via Jeelink.
-The jeelink can be used with the preloaded software (rfmdemo) for the reading of openenergy sensors (emon).
-For the usage of LaCrosse sensors, the firmware has to be exchanged (see iobroker forum).
+This is an adapter for ioBroker to integrate RFM12B/RFM69 via a LaCrosseGateway.
+The LaCrosseGateway documentation can be found at https://wiki.fhem.de/wiki/LaCrosseGateway_V1.x
 
 ## Installation:
 ### released version
 ```javascript
-npm install iobroker.jeelink
+there is no production release right now
 ```
 on raspberry it might help to use:
 ```javascript
- npm install --unsafe-perm iobroker.jeelink
+there is no production release right now
  ```
- because serialport package must be built on unsupported arm-hw 
-
 ### the actual development version from github (when under testing, may not work!)
 ```javascript
-npm install https://github.com/foxthefox/ioBroker.jeelink/tarball/master --production
+npm install https://github.com/Innovatone/ioBroker.lacrossegateway/tarball/master --production
 ```
 or
 ```javascript
-npm install --unsafe-perm https://github.com/foxthefox/ioBroker.jeelink/tarball/master --production
+npm install --unsafe-perm https://github.com/Innovatone/ioBroker.lacrossegateway/tarball/master --production
 ```
 ## Settings:
-- USB port of JeelinkAdapter usually /dev/ttyACME
-- Serial Speed usually 57600 Baud
+- IP address of LaCrosseGateway
+- IP port of LaCrosseGateway
 
 ## Configuration:
 to be done in admin
-* deinition of the USB port
-* setting the baudrate
+* definition of the IP address
+* setting the IP port
 - define sensor address which is received on air
 - define unique sensors address within adapter (LaCrosse changes the on air address after battery change, so observe the log and adjust the sensor address after battery change)
 - define the type of sensor (see belows examples)
@@ -50,7 +47,8 @@ to be done in admin
 |LaCrosseDTH |TX|OK 9 ... |sensors from LaCrosse, technoline|
 |LaCrosseDTT |TX|OK 9 ... |sensors from LaCrosse, technoline double temp|
 |HMS100TF |TXH29DTH-IT|H00 ... |sensors technoline|
-|LaCrosseBMP180||OK WS ... |sensor mod, superjee|
+|LaCrosseBMP180||OK WS ... |sensor mod, LGW internal|
+|LaCrosseBME280||OK WS ... |sensor mod, LGW internal|
 |LaCrosseWS|WS1080,TX22,WS1600|OK WS ... |Weather Station|
 |EC3000|EC3000|OK 22 ... |Energy Meter|
 |EMT7110|EMT7110|OK EMT7110 ... |Energy Meter|
@@ -64,6 +62,9 @@ to be done in admin
 
 
 ## Changelog:
+### 0.2.0
+* first development release using LaCrosseGateway. Code based on adapter of foxthefox. Thanks.
+
 ### 0.1.3
 * (atl285) added new sensor type LacCrosseDTT (double temp like TX25-IT)
 

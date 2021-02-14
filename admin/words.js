@@ -1,15 +1,15 @@
     // Dictionary (systemDictionary is global variable from adapter-settings.js)
     systemDictionary = {
-  "jeelink adapter settings": {
-    "en": "jeelink adapter settings",
+  "lacrossegateway adapter settings": {
+    "en": "lacrossegateway adapter settings",
     "de": "Jeelink-Adaptereinstellungen",
-    "ru": "настройки адаптера jeelink",
-    "pt": "Configurações do adaptador jeelink",
-    "nl": "jeelink-adapterinstellingen",
-    "fr": "paramètres de l'adaptateur jeelink",
-    "it": "impostazioni della scheda jeelink",
-    "es": "configuración del adaptador jeelink",
-    "pl": "ustawienia adaptera jeelink"
+    "ru": "настройки адаптера lacrossegateway",
+    "pt": "Configurações do adaptador lacrossegateway",
+    "nl": "lacrossegateway-adapterinstellingen",
+    "fr": "paramètres de l'adaptateur lacrossegateway",
+    "it": "impostazioni della scheda lacrossegateway",
+    "es": "configuración del adaptador lacrossegateway",
+    "pl": "ustawienia adaptera lacrossegateway"
   },
   "name": {
     "en": "name",
@@ -55,16 +55,16 @@
     "es": "identificación única del sensor",
     "pl": "unikalny identyfikator czujnika"
   },
-  "jeelink USB adapter settings": {
-    "en": "jeelink USB adapter settings",
-    "de": "Jeelink USB-Adaptereinstellungen",
-    "ru": "Настройки адаптера USB-устройства jeelink",
-    "pt": "Configurações do adaptador USB do jeelink",
-    "nl": "jeelink USB-adapterinstellingen",
-    "fr": "paramètres de l'adaptateur USB jeelink",
-    "it": "jeelink Impostazioni dell'adattatore USB",
-    "es": "configuración del adaptador USB jeelink",
-    "pl": "ustawienia adaptera USB jeelink"
+  "lacrossegateway TCP adapter settings": {
+    "en": "lacrossegateway TCP adapter settings",
+    "de": "Jeelink TCP-Adaptereinstellungen",
+    "ru": "Настройки адаптера USB-устройства lacrossegateway",
+    "pt": "Configurações do adaptador USB do lacrossegateway",
+    "nl": "lacrossegateway USB-adapterinstellingen",
+    "fr": "paramètres de l'adaptateur USB lacrossegateway",
+    "it": "lacrossegateway Impostazioni dell'adattatore USB",
+    "es": "configuración del adaptador USB lacrossegateway",
+    "pl": "ustawienia adaptera USB lacrossegateway"
   },
   "valid sensor types:": {
     "en": "valid sensor types:",
@@ -77,9 +77,9 @@
     "es": "tipos de sensor válidos:",
     "pl": "prawidłowe typy czujników:"
   },
-  "serialport": {
-    "en": "serialport",
-    "de": "serielle Schnittstelle",
+  "ipaddress": {
+    "en": "ip address",
+    "de": "IP Adresse",
     "ru": "Серийный порт",
     "pt": "porta serial",
     "nl": "seriele poort",
@@ -88,9 +88,9 @@
     "es": "Puerto serial",
     "pl": "Port szeregowy"
   },
-  "baudrate": {
-    "en": "baudrate",
-    "de": "Baudrate",
+  "ipport": {
+    "en": "ip port",
+    "de": "IP Port",
     "ru": "бод",
     "pt": "taxa de transmissão",
     "nl": "baudrate",

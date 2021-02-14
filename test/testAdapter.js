@@ -13,7 +13,7 @@ SerialPort.Binding = MockBinding
 // const port = new SerialPort('/dev/ttyUSB0')
 
 // create reader with serialport stub
-//const SerialPort = proxyquire('../jeelink.js', { 'serialport': EventEmitter })
+//const SerialPort = proxyquire('../lacrossegateway.js', { 'serialport': EventEmitter })
 
 var objects = null;
 var states  = null;
@@ -324,10 +324,10 @@ describe('Test ' + adapterShortName + ' adapter', function() {
                 if (err) console.error(err);
                 expect(state).to.exist;
                 if (!state) {
-                    console.error('state "jeelink.0.LaCrosse_4.temp" not set');
+                    console.error('state "lacrossegateway.0.LaCrosse_4.temp" not set');
                 }
                 else {
-                    console.log('jeelink.0.LaCrosse_4.temp          ... ' + state.val);
+                    console.log('lacrossegateway.0.LaCrosse_4.temp          ... ' + state.val);
                     expect(state.val).to.exist;
                     //expect(state.val).to.be.equal(17.5);
                     done();
@@ -342,10 +342,10 @@ describe('Test ' + adapterShortName + ' adapter', function() {
                 if (err) console.error(err);
                 expect(state).to.exist;
                 if (!state) {
-                    console.error('state "jeelink.0.LaCrosse_2.temp" not set');
+                    console.error('state "lacrossegateway.0.LaCrosse_2.temp" not set');
                 }
                 else {
-                    console.log('jeelink.0.LaCrosse_2.temp          ... ' + state.val);
+                    console.log('lacrossegateway.0.LaCrosse_2.temp          ... ' + state.val);
                     expect(state.val).to.exist;
                     //expect(state.val).to.be.equal(17.5);
                     done();

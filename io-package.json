@@ -1,8 +1,20 @@
 {
     "common": {
-        "name": "jeelink",
-        "version": "0.1.3",
+        "name": "lacrossegateway",
+        "version": "0.2.0",
         "news": {
+            "0.2.0": {
+                "en": "first development release using LaCrosseGateway",
+                "de": "Erste Entwicklungsfreigabe für LaCrosseGateway",
+                "ru": "новый датчик с двойной температурой",
+                "pt": "novo sensor com dupla temperatura",
+                "nl": "nieuwe sensor met dubbele temp",
+                "fr": "nouveau capteur à double temp",
+                "it": "nuovo sensore con doppia temperatura",
+                "es": "nuevo sensor con doble temperatura",
+                "pl": "nowy czujnik z podwójną temperaturą",
+                "zh-cn": "新型双温传感器"
+            },
           "0.1.3": {
                 "en": "new sensor with double temp",
                 "de": "neuer Sensor mit Doppeltemp",
@@ -107,16 +119,16 @@
                 "pl": "Dodano LaCrosseBMP180, adminv3"
               }
         },
-        "title": "jeelink",
+        "title": "lacrossegateway",
         "titleLang": {
-            "en": "jeelink adapter",
+            "en": "lacrossegateway adapter",
             "de": "Jeelink-Adapter",
             "ru": "адаптер для хэндлинка",
-            "pt": "adaptador jeelink",
-            "nl": "jeelink adapter",
+            "pt": "adaptador lacrossegateway",
+            "nl": "lacrossegateway adapter",
             "fr": "adaptateur de joncteur",
-            "it": "adattatore jeelink",
-            "es": "adaptador jeelink",
+            "it": "adattatore lacrossegateway",
+            "es": "adaptador lacrossegateway",
             "pl": "Przystawka JELINK"
         },
         "desc": {
@@ -134,7 +146,7 @@
         "mode": "daemon",
         "license": "MIT",
         "keywords": [
-            "jeelink",
+            "lacrossegateway",
             "openenergy",
             "RFM",
             "LaCrosse",
@@ -142,8 +154,8 @@
         ],
         "type": "hardware",
         "icon": "jeelab_logo.png",
-        "extIcon": "https://raw.githubusercontent.com/foxthefox/ioBroker.jeelink/master/admin/jeelab_logo.png",
-        "readme": "https://github.com/foxthefox/ioBroker.jeelink/blob/master/README.md",
+        "extIcon": "https://raw.githubusercontent.com/foxthefox/ioBroker.lacrossegateway/master/admin/jeelab_logo.png",
+        "readme": "https://github.com/foxthefox/ioBroker.lacrossegateway/blob/master/README.md",
         "loglevel": "debug",
         "materialize": true,
         "compact": true,
@@ -155,8 +167,8 @@
         ]
     },
     "native": {
-        "serialport": "/dev/ttyUSB0",
-        "baudrate": 57600,
+        "ipaddress": "192.168.2.206",
+        "ipport": 8183,
         "command": "",
         "command_en": false,
         "sensors": [
