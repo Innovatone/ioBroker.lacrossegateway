@@ -143,17 +143,17 @@
                 "pl": "Dodano LaCrosseBMP180, adminv3"
               }
         },
-        "title": "jeelink",
+        "title": "lacrossegateway",
         "titleLang": {
-            "en": "jeelink adapter",
-            "de": "Jeelink-Adapter",
+            "en": "Lacrossegateway adapter",
+            "de": "Lacrossegateway-Adapter",
             "ru": "адаптер для хэндлинка",
-            "pt": "adaptador jeelink",
-            "nl": "jeelink adapter",
+            "pt": "adaptador Lacrossegateway",
+            "nl": "Lacrossegateway adapter",
             "fr": "adaptateur de joncteur",
-            "it": "adattatore jeelink",
-            "es": "adaptador jeelink",
-            "pl": "Przystawka JELINK"
+            "it": "adattatore Lacrossegateway",
+            "es": "adaptador Lacrossegateway",
+            "pl": "Przystawka Lacrossegateway"
         },
         "desc": {
             "en": "read 868Mhz sensors of Technoline, emonTH, Lacrosse ",
