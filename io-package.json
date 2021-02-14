@@ -1,32 +1,8 @@
 {
     "common": {
-        "name": "lacrossegateway",
-        "version": "0.2.2",
+        "name": "jeelink",
+        "version": "0.2.0",
         "news": {
-            "0.2.2": {
-                "en": "Name changes",
-                "de": "Name geändert",
-                "ru": "новый датчик с двойной температурой",
-                "pt": "novo sensor com dupla temperatura",
-                "nl": "nieuwe sensor met dubbele temp",
-                "fr": "nouveau capteur à double temp",
-                "it": "nuovo sensore con doppia temperatura",
-                "es": "nuevo sensor con doble temperatura",
-                "pl": "nowy czujnik z podwójną temperaturą",
-                "zh-cn": "新型双温传感器"
-            },
-            "0.2.1": {
-                "en": "Innovatone Bug Fix Release",
-                "de": "Innovatone Bug Fix Release",
-                "ru": "новый датчик с двойной температурой",
-                "pt": "novo sensor com dupla temperatura",
-                "nl": "nieuwe sensor met dubbele temp",
-                "fr": "nouveau capteur à double temp",
-                "it": "nuovo sensore con doppia temperatura",
-                "es": "nuevo sensor con doble temperatura",
-                "pl": "nowy czujnik z podwójną temperaturą",
-                "zh-cn": "新型双温传感器"
-            },
             "0.2.0": {
                 "en": "first development release using LaCrosseGateway",
                 "de": "Erste Entwicklungsfreigabe für LaCrosseGateway",
@@ -143,17 +119,17 @@
                 "pl": "Dodano LaCrosseBMP180, adminv3"
               }
         },
-        "title": "lacrossegateway",
+        "title": "jeelink",
         "titleLang": {
-            "en": "Lacrossegateway adapter",
-            "de": "Lacrossegateway-Adapter",
+            "en": "jeelink adapter",
+            "de": "Jeelink-Adapter",
             "ru": "адаптер для хэндлинка",
-            "pt": "adaptador Lacrossegateway",
-            "nl": "Lacrossegateway adapter",
+            "pt": "adaptador jeelink",
+            "nl": "jeelink adapter",
             "fr": "adaptateur de joncteur",
-            "it": "adattatore Lacrossegateway",
-            "es": "adaptador Lacrossegateway",
-            "pl": "Przystawka Lacrossegateway"
+            "it": "adattatore jeelink",
+            "es": "adaptador jeelink",
+            "pl": "Przystawka JELINK"
         },
         "desc": {
             "en": "read 868Mhz sensors of Technoline, emonTH, Lacrosse ",
@@ -170,35 +146,31 @@
         "mode": "daemon",
         "license": "MIT",
         "keywords": [
-        "ioBroker",
-        "Jeelink",
-        "Lacrossegateway",
-        "Lacrosse",
-        "Openenergy",
-        "RFM12B",
-        "EMT7110",
-        "Technoline",
-        "EC3000",
-        "EC3K"
-        ], 
+            "jeelink",
+            "openenergy",
+            "RFM",
+            "LaCrosse",
+            "emonTH"
+        ],
         "type": "hardware",
         "icon": "jeelab_logo.png",
-        "extIcon": "https://raw.githubusercontent.com/innovatone/ioBroker.lacrossegateway/master/admin/jeelab_logo.png",
-        "readme": "https://github.com/innnovatone/ioBroker.lacrossegateway/blob/master/README.md",
+        "extIcon": "https://raw.githubusercontent.com/foxthefox/ioBroker.jeelink/master/admin/jeelab_logo.png",
+        "readme": "https://github.com/foxthefox/ioBroker.jeelink/blob/master/README.md",
         "loglevel": "debug",
         "materialize": true,
         "compact": true,
         "authors": [
             {
-                "name": "Innovatone",
-                "email": "innovatone@gmail.com"
+                "name": "foxthefox",
+                "email": "foxthefox@wysiwis.net"
             }
         ]
     },
     "native": {
-        "ipaddress": "lgw.domain.com",
-        "ipport": 81,
+        "ipaddress": "192.168.2.206",
+        "ipport": 8183,
         "command": "",
+        "command_en": false,
         "sensors": [
             {
                 "sid": "18",

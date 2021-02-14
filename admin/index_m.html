@@ -55,9 +55,9 @@
             }
             values2table('values', sensors, onChange);
             /**
-            socket.emit('subscribeObjects',  'Lacrossegateway.' + instance + '.*');
-            socket.emit('subscribeStates',  'Lacrossegateway.' + instance + '.*');
-            socket.emit('getState', 'Lacrossegateway.' + instance + '.foundDevices.val', function (err, state) {
+            socket.emit('subscribeObjects',  'jeelink.' + instance + '.*');
+            socket.emit('subscribeStates',  'jeelink.' + instance + '.*');
+            socket.emit('getState', 'jeelink.' + instance + '.foundDevices.val', function (err, state) {
                 console.log("got the following config : "+ JSON.stringify(state));
                         if (!err) {
                             showMessage("new devices found " +JSON.stringify(state) );
@@ -136,19 +136,19 @@
         <div class="section">
             <div class="row">
                 <div class="col s12">
-                    <h6 class="translate sub-title">Lacrossegateway Settings</h6>
+                    <h6 class="translate sub-title">Jeelink Settings</h6>
                 </div>
                 <div class="col s6">
                     <input class="value" id="ipaddress" />
-                    <label for="ipaddress" class="translate">Hosname / IP address</label>
-                    <p>lgw.domain.com / 192.168.100.1</p>
+                    <label for="ipaddress" class="translate">IP address</label>
+                    <p>192.168.2.206</p>
                     </td>
                     <!-- Important: label must come directly after input. Label is important. -->
                 </div>
                 <div class="col s6">
                     <input class="value" id="ipport" />
                     <label for="ipport" class="translate">IP port</label>
-                    <p>usually 81</p>
+                    <p>usually 8183</p>
                     <!-- Important: label must come directly after input. Label is important. -->
                 </div>
             </div>
@@ -157,13 +157,19 @@
         <div class="section">
             <div class="row">
                 <div class="col s12">
-                    <h6 class="translate sub-title">Init Command</h6>
+                    <h6 class="translate sub-title">Jeelink Command (trial)</h6>
                 </div>
                 <div class="col s6">
                     <input class="value string" id="command" />
                     <label for="command" class="translate">command for stick setup</label>
-                    <p>0a 20000#1r v</p>
+                    <p>usually empty</p>
                     <!-- Important: label must come directly after input. Label is important. -->
+                </div>
+                <div class="col s6">
+                    <input class="value" id="command_en" type="checkbox" />
+                    <span class="translate">enable command</span>
+                    <p>usually empty</p>
+                    <!-- Important: span must come directly after checkbox input (only by checkbox the span will be used!) -->
                 </div>
             </div>
         </div>
