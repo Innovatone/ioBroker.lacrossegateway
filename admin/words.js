@@ -121,17 +121,6 @@
     "es": "comando para la configuración del palo",
     "pl": "polecenie konfiguracji pendrive"
   },
-  "enable command": {
-    "en": "enable command",
-    "de": "Befehl aktivieren",
-    "ru": "команда enable",
-    "pt": "comando de habilitação",
-    "nl": "commando inschakelen",
-    "fr": "activer la commande",
-    "it": "abilita il comando",
-    "es": "habilitar comando",
-    "pl": "włącz polecenie"
-  },
   "usually empty": {
     "en": "usually empty",
     "de": "normalerweise leer",

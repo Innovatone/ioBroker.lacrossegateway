@@ -1924,7 +1924,7 @@ function main() {
                 }
     });
 
-    if (adapter.config.command_en) {
+    if (adapter.config.command != '') {
         setTimeout(write_cmd(adapter.config.command), 1500); //1,5s Verzögerung
     }
     
