@@ -77,7 +77,7 @@
     "es": "tipos de sensor válidos:",
     "pl": "prawidłowe typy czujników:"
   },
-  "ipaddress": {
+  "iphost": {
     "en": "ip address",
     "de": "IP Adresse",
     "ru": "Серийный порт",

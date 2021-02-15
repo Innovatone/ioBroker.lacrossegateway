@@ -1870,13 +1870,13 @@ function main() {
         clientPort:   parseInt(adapter.config.ipport)
     };
 
-    adapter.log.debug('configured IP address : ' + adapter.config.ipaddress );
+    adapter.log.debug('configured IP address : ' + adapter.config.iphost );
     adapter.log.debug('configured IP port : ' + adapter.config.ipport );
     //adapter.log.debug('options : ' + JSON.stringify(options) );   
     const client = new TcpClient.Socket();
         //const client = new net.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
-    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
-        adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+    client.connect(adapter.config.ipport, adapter.config.iphost, function (connect) {
+        adapter.log.info('open: ' + adapter.config.iphost + ':' + adapter.config.ipport);
         client.setEncoding('utf-8');
     });
 
@@ -1942,8 +1942,8 @@ function main() {
             client.end(function (end) {
                 adapter.log.debug('closed...');
                 timer2 = setTimeout(function () {
-                    client.connect(adapter.config.ipport, adapter.config.ipaddress, function (connect) {
-                        adapter.log.info('open: ' + adapter.config.ipaddress + ':' + adapter.config.ipport);
+                    client.connect(adapter.config.ipport, adapter.config.iphost, function (connect) {
+                        adapter.log.info('open: ' + adapter.config.iphost + ':' + adapter.config.ipport);
                         client.setEncoding('utf-8');
                     });
                 }, 15000); // 15 Sekunden warten bis open

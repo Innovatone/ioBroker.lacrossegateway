@@ -1,220 +1,200 @@
 {
-    "common": {
-        "name": "lacrossegateway",
-        "version": "0.2.0",
-        "news": {
-            "0.2.0": {
-                "en": "first development release using LaCrosseGateway",
-                "de": "Erste Entwicklungsfreigabe für LaCrosseGateway",
-                "ru": "новый датчик с двойной температурой",
-                "pt": "novo sensor com dupla temperatura",
-                "nl": "nieuwe sensor met dubbele temp",
-                "fr": "nouveau capteur à double temp",
-                "it": "nuovo sensore con doppia temperatura",
-                "es": "nuevo sensor con doble temperatura",
-                "pl": "nowy czujnik z podwójną temperaturą",
-                "zh-cn": "新型双温传感器"
-            },
-          "0.1.3": {
-                "en": "new sensor with double temp",
-                "de": "neuer Sensor mit Doppeltemp",
-                "ru": "новый датчик с двойной температурой",
-                "pt": "novo sensor com dupla temperatura",
-                "nl": "nieuwe sensor met dubbele temp",
-                "fr": "nouveau capteur à double temp",
-                "it": "nuovo sensore con doppia temperatura",
-                "es": "nuevo sensor con doble temperatura",
-                "pl": "nowy czujnik z podwójną temperaturą",
-                "zh-cn": "新型双温传感器"
-              },
-          "0.1.2": {
-                "en": "correction in weather modul",
-                "de": "Korrektur im Wettermodul",
-                "ru": "коррекция погоды по модулю",
-                "pt": "correção no módulo do tempo",
-                "nl": "correctie in weermodul",
-                "fr": "correction dans le module météo",
-                "it": "correzione nel modulo meteorologico",
-                "es": "corrección en el módulo de tiempo",
-                "pl": "korekta w module pogodowym",
-                "zh-cn": "天气模块校正"
-              },
-        "0.1.1": {
-                "en": "compatibility with NodeJS10, enhanced testing",
-                "ru": "совместимость с NodeJS10, расширенное тестирование",
-                "de": "Kompatibilität mit NodeJS10, erweitertes Testen",
-                "nl": "compatibiliteit met NodeJS10, verbeterde testen",
-                "fr": "compatibilité avec NodeJS10, tests améliorés",
-                "es": "compatibilidad con NodeJS10, pruebas mejoradas",
-                "it": "compatibilità con NodeJS10, test migliorati",
-                "pt": "compatibilidade com o NodeJS10, teste aprimorado",
-                "pl": "zgodność z NodeJS10, ulepszone testy",
-                "zh-cn": "与NodeJS10的兼容性，增强的测试"
-              },      
-              "0.1.0": {
-                "en": "compact mode",
-                "de": "Kompaktmodus",
-                "ru": "компактный режим",
-                "pt": "modo compacto",
-                "nl": "compacte modus",
-                "fr": "mode compact",
-                "it": "modalità compatta",
-                "es": "modo compacto",
-                "pl": "tryb kompaktowy",
-                "zh-cn": "紧凑模式"
-              },
-             "0.0.8": {
-                "en": "compact mode added",
-                "de": "Kompaktmodus hinzugefügt",
-                "ru": "добавлен компактный режим",
-                "pt": "modo compacto adicionado",
-                "nl": "compacte modus toegevoegd",
-                "fr": "mode compact ajouté",
-                "it": "modalità compatta aggiunta",
-                "es": "modo compacto agregado",
-                "pl": "dodano tryb kompaktowy"
-              },
-             "0.0.7": {
-                  "en": "level sensor added",
-                  "de": "Füllstandssensor hinzugefügt",
-                  "ru": "добавлен датчик уровня",
-                  "pt": "sensor de nível adicionado",
-                  "nl": "niveausensor toegevoegd",
-                  "fr": "capteur de niveau ajouté",
-                  "it": "sensore di livello aggiunto",
-                  "es": "sensor de nivel agregado",
-                  "pl": "dodano czujnik poziomu"
-                },
-            "0.0.6": {
-                "en": "last version of node-serialport",
-                "de": "letzte Version von node-serialport",
-                "ru": "последняя версия node-serialport",
-                "pt": "última versão do node-serialport",
-                "nl": "laatste versie van node-serialport",
-                "fr": "dernière version de node-serialport",
-                "it": "ultima versione di node-serialport",
-                "es": "última versión del nodo-puerto serial",
-                "pl": "ostatnia wersja portu-portu szeregowego"
-              },
-            "0.0.5": {
-                "en": "adminv3 improved (values2table)",
-                "de": "adminv3 verbessert (values2table)",
-                "ru": "adminv3 улучшен (values2table)",
-                "pt": "adminv3 melhorado (values2table)",
-                "nl": "adminv3 verbeterd (values2table)",
-                "fr": "adminv3 amélioré (values2table)",
-                "it": "adminv3 improved (values2table)",
-                "es": "adminv3 mejorado (values2table)",
-                "pl": "poprawiono adminv3 (values2table)"
-              },
-            "0.0.4":{
-                "en": "LaCrosseBMP180 added, adminv3",
-                "de": "LaCrosseBMP180 hinzugefügt, adminv3",
-                "ru": "Добавлен LaCrosseBMP180, adminv3",
-                "pt": "LaCrosseBMP180 adicionado, adminv3",
-                "nl": "LaCrosseBMP180 toegevoegd, adminv3",
-                "fr": "LaCrosseBMP180 ajouté, adminv3",
-                "it": "LaCrosseBMP180 aggiunto, adminv3",
-                "es": "LaCrosseBMP180 agregado, adminv3",
-                "pl": "Dodano LaCrosseBMP180, adminv3"
-              }
-        },
-        "title": "lacrossegateway",
-        "titleLang": {
-            "en": "lacrossegateway adapter",
-            "de": "Jeelink-Adapter",
-            "ru": "адаптер для хэндлинка",
-            "pt": "adaptador lacrossegateway",
-            "nl": "lacrossegateway adapter",
-            "fr": "adaptateur de joncteur",
-            "it": "adattatore lacrossegateway",
-            "es": "adaptador lacrossegateway",
-            "pl": "Przystawka JELINK"
-        },
-        "desc": {
-            "en": "read 868Mhz sensors of Technoline, emonTH, Lacrosse ",
-            "de": "Einlesen der 868Mhz Sensoren von Technoline, emonTH, Lacrosse",
-            "ru": "читать 868 МГц датчики Technoline, emonTH, Lacrosse",
-            "pt": "read 868Mhz sensors of Technoline, emonTH, Lacrosse",
-            "nl": "lees 868MHz sensoren van Technoline, emonTH, Lacrosse",
-            "fr": "lire les capteurs 868Mhz de Technoline, emonTH, Lacrosse",
-            "it": "leggi i sensori 868Mhz di Technoline, emonTH, Lacrosse",
-            "es": "leer sensores de 868Mhz de Technoline, emonTH, Lacrosse",
-            "pl": "przeczytaj czujniki 868Mhz Technoline, emonTH, Lacrosse"
-          },
-        "platform": "Javascript/Node.js",
-        "mode": "daemon",
-        "license": "MIT",
-        "keywords": [
-            "lacrossegateway",
-            "openenergy",
-            "RFM",
-            "LaCrosse",
-            "emonTH"
-        ],
-        "type": "hardware",
-        "icon": "jeelab_logo.png",
-        "extIcon": "https://raw.githubusercontent.com/foxthefox/ioBroker.lacrossegateway/master/admin/jeelab_logo.png",
-        "readme": "https://github.com/foxthefox/ioBroker.lacrossegateway/blob/master/README.md",
-        "loglevel": "debug",
-        "materialize": true,
-        "compact": true,
-        "authors": [
-            {
-                "name": "foxthefox",
-                "email": "foxthefox@wysiwis.net"
-            }
-        ]
+  "common": {
+    "name": "lacrossegateway",
+    "version": "0.2.0",
+    "news": {
+      "0.2.0": {
+        "en": "first development release using LaCrosseGateway",
+        "de": "Erste Entwicklungsfreigabe für LaCrosseGateway",
+        "ru": "новый датчик с двойной температурой",
+        "pt": "novo sensor com dupla temperatura",
+        "nl": "nieuwe sensor met dubbele temp",
+        "fr": "nouveau capteur à double temp",
+        "it": "nuovo sensore con doppia temperatura",
+        "es": "nuevo sensor con doble temperatura",
+        "pl": "nowy czujnik z podwójną temperaturą",
+        "zh-cn": "新型双温传感器"
+      },
+      "0.1.3": {
+        "en": "new sensor with double temp",
+        "de": "neuer Sensor mit Doppeltemp",
+        "ru": "новый датчик с двойной температурой",
+        "pt": "novo sensor com dupla temperatura",
+        "nl": "nieuwe sensor met dubbele temp",
+        "fr": "nouveau capteur à double temp",
+        "it": "nuovo sensore con doppia temperatura",
+        "es": "nuevo sensor con doble temperatura",
+        "pl": "nowy czujnik z podwójną temperaturą",
+        "zh-cn": "新型双温传感器"
+      },
+      "0.1.2": {
+        "en": "correction in weather modul",
+        "de": "Korrektur im Wettermodul",
+        "ru": "коррекция погоды по модулю",
+        "pt": "correção no módulo do tempo",
+        "nl": "correctie in weermodul",
+        "fr": "correction dans le module météo",
+        "it": "correzione nel modulo meteorologico",
+        "es": "corrección en el módulo de tiempo",
+        "pl": "korekta w module pogodowym",
+        "zh-cn": "天气模块校正"
+      },
+      "0.1.1": {
+        "en": "compatibility with NodeJS10, enhanced testing",
+        "ru": "совместимость с NodeJS10, расширенное тестирование",
+        "de": "Kompatibilität mit NodeJS10, erweitertes Testen",
+        "nl": "compatibiliteit met NodeJS10, verbeterde testen",
+        "fr": "compatibilité avec NodeJS10, tests améliorés",
+        "es": "compatibilidad con NodeJS10, pruebas mejoradas",
+        "it": "compatibilità con NodeJS10, test migliorati",
+        "pt": "compatibilidade com o NodeJS10, teste aprimorado",
+        "pl": "zgodność z NodeJS10, ulepszone testy",
+        "zh-cn": "与NodeJS10的兼容性，增强的测试"
+      },
+      "0.1.0": {
+        "en": "compact mode",
+        "de": "Kompaktmodus",
+        "ru": "компактный режим",
+        "pt": "modo compacto",
+        "nl": "compacte modus",
+        "fr": "mode compact",
+        "it": "modalità compatta",
+        "es": "modo compacto",
+        "pl": "tryb kompaktowy",
+        "zh-cn": "紧凑模式"
+      },
+      "0.0.8": {
+        "en": "compact mode added",
+        "de": "Kompaktmodus hinzugefügt",
+        "ru": "добавлен компактный режим",
+        "pt": "modo compacto adicionado",
+        "nl": "compacte modus toegevoegd",
+        "fr": "mode compact ajouté",
+        "it": "modalità compatta aggiunta",
+        "es": "modo compacto agregado",
+        "pl": "dodano tryb kompaktowy"
+      },
+      "0.0.7": {
+        "en": "level sensor added",
+        "de": "Füllstandssensor hinzugefügt",
+        "ru": "добавлен датчик уровня",
+        "pt": "sensor de nível adicionado",
+        "nl": "niveausensor toegevoegd",
+        "fr": "capteur de niveau ajouté",
+        "it": "sensore di livello aggiunto",
+        "es": "sensor de nivel agregado",
+        "pl": "dodano czujnik poziomu"
+      },
+      "0.0.6": {
+        "en": "last version of node-serialport",
+        "de": "letzte Version von node-serialport",
+        "ru": "последняя версия node-serialport",
+        "pt": "última versão do node-serialport",
+        "nl": "laatste versie van node-serialport",
+        "fr": "dernière version de node-serialport",
+        "it": "ultima versione di node-serialport",
+        "es": "última versión del nodo-puerto serial",
+        "pl": "ostatnia wersja portu-portu szeregowego"
+      },
+      "0.0.5": {
+        "en": "adminv3 improved (values2table)",
+        "de": "adminv3 verbessert (values2table)",
+        "ru": "adminv3 улучшен (values2table)",
+        "pt": "adminv3 melhorado (values2table)",
+        "nl": "adminv3 verbeterd (values2table)",
+        "fr": "adminv3 amélioré (values2table)",
+        "it": "adminv3 improved (values2table)",
+        "es": "adminv3 mejorado (values2table)",
+        "pl": "poprawiono adminv3 (values2table)"
+      },
+      "0.0.4": {
+        "en": "LaCrosseBMP180 added, adminv3",
+        "de": "LaCrosseBMP180 hinzugefügt, adminv3",
+        "ru": "Добавлен LaCrosseBMP180, adminv3",
+        "pt": "LaCrosseBMP180 adicionado, adminv3",
+        "nl": "LaCrosseBMP180 toegevoegd, adminv3",
+        "fr": "LaCrosseBMP180 ajouté, adminv3",
+        "it": "LaCrosseBMP180 aggiunto, adminv3",
+        "es": "LaCrosseBMP180 agregado, adminv3",
+        "pl": "Dodano LaCrosseBMP180, adminv3"
+      }
     },
-    "native": {
-        "ipaddress": "192.168.2.206",
-        "ipport": 8183,
-        "command": "",
-        "command_en": false,
-        "sensors": [
-            {
-                "sid": "18",
-                "usid": "1",
-                "stype": "emonTH",
-                "name": "example emonTH"
-            },
-            {
-                "sid": "0",
-                "usid": "2",
-                "stype": "LaCrosseBMP180",
-                "name": "example superjee"
-            },
-            {
-                "sid": "55",
-                "usid": "3",
-                "stype": "LaCrosseDTH",
-                "name": "example LaCrosseDTH"
-            }
-        ]
+    "title": "lacrossegateway",
+    "titleLang": {
+      "en": "lacrossegateway adapter",
+      "de": "Jeelink-Adapter",
+      "ru": "адаптер для хэндлинка",
+      "pt": "adaptador lacrossegateway",
+      "nl": "lacrossegateway adapter",
+      "fr": "adaptateur de joncteur",
+      "it": "adattatore lacrossegateway",
+      "es": "adaptador lacrossegateway",
+      "pl": "Przystawka JELINK"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "foundDevices",
-            "type": "channel",
-            "common": {
-                "name": "foundDevices",
-                "role": "device"
-            },
-            "native": {}
-        },
-        {
-            "_id": "foundDevices.state",
-            "type": "state",
-            "common": {
-                "name": "new Devices",
-                "type": "array",
-                "role": "list",
-                "read": true,
-                "write": true,
-                "desc": "new Devices"
-            },
-            "native": {}
-        }
-    ]
+    "desc": {
+      "en": "read 868Mhz sensors of Technoline, emonTH, Lacrosse ",
+      "de": "Einlesen der 868Mhz Sensoren von Technoline, emonTH, Lacrosse",
+      "ru": "читать 868 МГц датчики Technoline, emonTH, Lacrosse",
+      "pt": "read 868Mhz sensors of Technoline, emonTH, Lacrosse",
+      "nl": "lees 868MHz sensoren van Technoline, emonTH, Lacrosse",
+      "fr": "lire les capteurs 868Mhz de Technoline, emonTH, Lacrosse",
+      "it": "leggi i sensori 868Mhz di Technoline, emonTH, Lacrosse",
+      "es": "leer sensores de 868Mhz de Technoline, emonTH, Lacrosse",
+      "pl": "przeczytaj czujniki 868Mhz Technoline, emonTH, Lacrosse"
+    },
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "license": "MIT",
+    "keywords": [
+      "lacrossegateway",
+      "openenergy",
+      "RFM",
+      "LaCrosse",
+      "emonTH"
+    ],
+    "type": "hardware",
+    "icon": "jeelab_logo.png",
+    "extIcon": "https://raw.githubusercontent.com/foxthefox/ioBroker.lacrossegateway/master/admin/jeelab_logo.png",
+    "readme": "https://github.com/foxthefox/ioBroker.lacrossegateway/blob/master/README.md",
+    "loglevel": "debug",
+    "materialize": true,
+    "compact": true,
+    "authors": [
+      {
+        "name": "foxthefox",
+        "email": "foxthefox@wysiwis.net"
+      }
+    ],
+    "installedFrom": "https://github.com/Innovatone/ioBroker.lacrossegateway/tarball/aeade1b7b8fbbeeb9e0481c4dae4bcbdf6fb6e05"
+  },
+  "native": {
+    "iphost": "",
+    "ipport": "",
+    "command": "",
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "foundDevices",
+      "type": "channel",
+      "common": {
+        "name": "foundDevices",
+        "role": "device"
+      },
+      "native": {}
+    },
+    {
+      "_id": "foundDevices.state",
+      "type": "state",
+      "common": {
+        "name": "new Devices",
+        "type": "array",
+        "role": "list",
+        "read": true,
+        "write": true,
+        "desc": "new Devices"
+      },
+      "native": {}
+    }
+  ]
 }
