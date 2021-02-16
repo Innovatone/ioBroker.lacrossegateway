@@ -4,8 +4,7 @@
 
 //const SerialPort = require("serialport");
 //const Readline = SerialPort.parsers.Readline;
-const TcpClient = require("net");
-var client = null;
+const net = require('net');
 
 var timer = null;
 var timer2 = null;
@@ -856,6 +855,7 @@ function defineEC3000(id, name){
     });
 }
 
+// OK 22 119 126 1 52 140 250 0 238 79 60 0 1 12 50 0 2 83 126 2 0 [77 7E 8C FA 00 00 4F 3C 00 00 00 0E BB 87 77 00 02 53 7E 00 21 38 4C 13 03 19 80 2D F1 13 40 00 00 00 00 0E E0 28 05 D6 17]
 function logEC3000(data){
     var tmp = data.split(' ');
     if(tmp[0]==='OK'){                      // Wenn ein Datensatz sauber gelesen wurde
@@ -1789,7 +1789,7 @@ function logLaCrosseBMP180(data) {
     }
 }
 
-
+//OK VALUES LGW 1416620 UpTimeSeconds=111283,UpTimeText=1Tg. 6Std. 54Min. 43Sek. ,WIFI=FRITZ!Box 7590 BE,ReceivedFrames=7314,FramesPerMinute=9,RSSI=-69,FreeHeap=27648,LD.Min=0.51,LD.Avg=0.56,LD.Max=14.92,OLED=none
 function logValue(data) {
     var tmp = data.split(',');
     adapter.log.debug('logValue: ' + tmp);
@@ -1815,15 +1815,17 @@ function logValue(data) {
     adapter.setState('LaCrosseGW.uptimetext', { val: uptime[1], ack: true });
 }
 
-function write_cmd(command){
+// function write_cmd(command){
 
-            sp.write(command, function(err) {
-                if (err) {
-                    return adapter.log.debug('Error on write: ', err.message);
-                    }
-                adapter.log.debug('message to USB-stick written : ' + command);
-            });
-        }
+
+
+//             sp.write(command, function(err) {
+//                 if (err) {
+//                     return adapter.log.debug('Error on write: ', err.message);
+//                     }
+//                 adapter.log.debug('message to USB-stick written : ' + command);
+//             });
+//         }
 
 function main() {
 
@@ -1866,62 +1868,76 @@ function main() {
         }
     }
 
-    adapter.log.debug('LGW configured: ' + adapter.config.host + ':' + adapter.config.port);
-    const client = new TcpClient.Socket();
-        //const client = new net.Socket(adapter.config.port, adapter.config.ipaddress, function (error) {
-    client.connect(adapter.config.port, adapter.config.host, function (connect) {
-        adapter.log.info('open: ' + adapter.config.host + ':' + adapter.config.port);
-        client.setEncoding('utf-8');
+    var socket = new net.Socket();
+   
+    socket.connect (adapter.config.port, adapter.config.host, function() {
+        socket.setEncoding('utf-8');
+        adapter.log.debug('CONNECTED TO LGW: ' + adapter.config.host + ':' + adapter.config.port);
+
+        if (adapter.config.command != '') {
+            adapter.log.debug('Sending message: ' + adapter.config.command);
+            setTimeout(socket.write(adapter.config.command + '\r\n'), 500); //0,5s Verzögerung
+        }
     });
 
-    client.on('error',function(error){
-        adapter.log.info('failed to open: ' + error);
-        console.log('usb open error' + error);
-    });
-    
-    client.on('data', function(data) {
-                //var data1 = data.toString();
-                adapter.log.debug(' 0 - data received: ' + data) ;
-                console.log('recv data = '+ data) ;
-                if ( data.startsWith('H0')){
-                    logHMS100TF(data);
-                }
-                else {
-                    var tmp = data.split(' ');
-                    if(tmp[0]==='OK'){
-                        if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
-                            logLaCrosseDTH(data);
-                            }
-                        else if (tmp[1]=== '22'){ //22 ist fix für EC3000
-                            logEC3000(data);
-                            }
-                        else if (tmp[1]=== 'EMT7110'){ // EMT7110 ist fix für EMT7110
-                            logEMT7110(data);
-                            }
-                        else if (tmp[1]=== 'LS'){ // LS fix für level
-                            logLevel(data);
-                            }
-                        else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
-                            logLaCrosseBMP180(data);
-                            logLaCrosseBME280(data);
-                            logLaCrosseWS(data);
-                            }
-                        else if (tmp[1] === 'VALUES') { //OK Values
-                            adapter.log.debug(tmp);
-                            logValue(data);
-                        }
-                        else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
-                            logemonTH(data);
-                            logemonWater(data);
-                        }
-                    } 
-                }
+    socket.on('error', function(exception){
+        adapter.log.info('ERROR: failed to open: ' + error);
+        adapter.log.debug('Exception:' + exception);
     });
 
-    if (adapter.config.command != '') {
-        setTimeout(write_cmd(adapter.config.command), 1500); //1,5s Verzögerung
-    }
-    
+    socket.on('drain', function() {
+        adapter.log.debug("ERROR: drain!");
+    });
+
+    socket.on('timeout', function() {
+        adapter.log.debug("ERROR: timeout!");
+    });
+
+    // Add a 'close' event handler for the client socket
+    socket.on('close', function() {
+        adapter.log.debug('Connection closed');
+    });
+
+    // Add a 'data' event handler for the client socket data is what the server sent to this socket
+    socket.on('data', function(data) {        
+        if (data != ''){
+            adapter.log.debug('DATA: ' + data);
+            if (data.startsWith('H0')){
+                logHMS100TF(data);
+            }
+            else{
+                var tmp = data.split(' ');
+                if(tmp[0]==='OK'){
+                    if (tmp[1]=== '9'){ // 9 ist fix für LaCrosse
+                        logLaCrosseDTH(data);
+                    }
+                    else if (tmp[1]=== '22'){ //22 ist fix für EC3000
+                        logEC3000(data);
+                    }
+                    else if (tmp[1]=== 'EMT7110'){ // EMT7110 ist fix für EMT7110
+                        logEMT7110(data);
+                    }
+                    else if (tmp[1]=== 'LS'){ // LS fix für level
+                        logLevel(data);
+                    }
+                    else if (tmp[1]=== 'WS'){ //derzeitig fix für superjee, noch auf beide geschickt :-(
+                        logLaCrosseBMP180(data);
+                        logLaCrosseBME280(data);
+                        logLaCrosseWS(data);
+                    }
+                    else if (tmp[1] === 'VALUES') { //OK Values
+                        adapter.log.debug(tmp);
+                        logValue(data);
+                    }
+                    else {  // es wird auf beide log der Datenstrom geschickt und dann ausgewertet
+                        logemonTH(data);
+                        logemonWater(data);
+                    }
+                } 
+            }
+        }
+    });
+   
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
     adapter.on('stateChange', function (id, state) {
@@ -1932,17 +1948,17 @@ function main() {
         };
         if (timer) clearTimeout(timer);
         timer = setTimeout(function () {
-            adapter.log.error('Verbund zum LGW unterbrochen');
-            client.end(function (end) {
-                adapter.log.debug('closed...');
+            adapter.log.error('Verbindung zum LGW unterbrochen');
+            socket.end(function (end) {
+                adapter.log.debug('Socket closed...');
                 timer2 = setTimeout(function () {
-                    client.connect(adapter.config.port, adapter.config.host, function (connect) {
+                    socket.connect(adapter.config.port, adapter.config.host, function (connect) {
                         adapter.log.info('open: ' + adapter.config.host + ':' + adapter.config.port);
-                        client.setEncoding('utf-8');
+                        socket.setEncoding('utf-8');
                     });
                 }, 15000); // 15 Sekunden warten bis open
             });
-        }, 120000); // 120 Sekunden auf sate change warten
+        }, 120000); // 120 Sekunden auf state change warten
     })
 }
 
