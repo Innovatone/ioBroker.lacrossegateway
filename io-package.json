@@ -154,23 +154,22 @@
     ],
     "type": "hardware",
     "icon": "jeelab_logo.png",
-    "extIcon": "https://raw.githubusercontent.com/foxthefox/ioBroker.lacrossegateway/master/admin/jeelab_logo.png",
-    "readme": "https://github.com/foxthefox/ioBroker.lacrossegateway/blob/master/README.md",
+    "extIcon": "https://raw.githubusercontent.com/Innovatone/ioBroker.lacrossegateway/master/admin/jeelab_logo.png",
+    "readme": "https://github.com/Innovatone/ioBroker.lacrossegateway/blob/master/README.md",
     "loglevel": "debug",
     "materialize": true,
     "compact": true,
     "authors": [
       {
-        "name": "foxthefox",
-        "email": "foxthefox@wysiwis.net"
+        "name": "Innovatone",
+        "email": "innovatone@gmail.com"
       }
-    ],
-    "installedFrom": "https://github.com/Innovatone/ioBroker.lacrossegateway/tarball/aeade1b7b8fbbeeb9e0481c4dae4bcbdf6fb6e05"
+    ]
   },
   "native": {
     "iphost": "",
     "ipport": "",
-    "command": "",
+    "command": ""
   },
   "objects": [],
   "instanceObjects": [
