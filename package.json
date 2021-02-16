@@ -1,29 +1,41 @@
 {
   "name": "iobroker.lacrossegateway",
   "version": "0.2.0",
-  "description": "ioBroker lacrossegateway LaCrosse Gateway",
+  "description": "ioBroker LaCrosseGateway Jeelink adapter",
   "author": {
     "name": "Innovatone",
-    "email": "vmeineke@gmail.com"
+    "email": "innovatone@gmail.com"
   },
   "contributors": [
-    {}
+    {
+      "name": "foxthefox",
+      "email": "foxthefox@wysiwis.net"
+    },
+    {
+      "name": "verba03",
+      "email": "vmeineke@gmail.com"
+    }
   ],
   "homepage": "https://github.com/Innovatone/ioBroker.lacrossegateway",
   "license": "MIT",
-  "keywords": [
+    "keywords": [
     "ioBroker",
-    "lacrossegateway",
-    "RFM",
-    "openenergymonitor"
+    "Jeelink",
+    "Lacrossegateway",
+    "Lacrosse",
+    "Openenergy",
+    "RFM12B",
+    "EMT7110",
+    "Technoline",
+    "EC3000",
+    "EC3K"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Innovatone/ioBroker.lacrossegateway"
   },
   "dependencies": {
-    "serialport": "^7.1.5",
-    "@iobroker/adapter-core": "^1.0.3"
+    "@iobroker/adapter-core": "^2.4.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

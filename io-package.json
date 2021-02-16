@@ -121,8 +121,8 @@
     },
     "title": "lacrossegateway",
     "titleLang": {
-      "en": "lacrossegateway adapter",
-      "de": "Jeelink-Adapter",
+      "en": "Lacrossegateway adapter",
+      "de": "Lacrossegateway-Adapter",
       "ru": "адаптер для хэндлинка",
       "pt": "adaptador lacrossegateway",
       "nl": "lacrossegateway adapter",
@@ -132,26 +132,31 @@
       "pl": "Przystawka JELINK"
     },
     "desc": {
-      "en": "read 868Mhz sensors of Technoline, emonTH, Lacrosse ",
-      "de": "Einlesen der 868Mhz Sensoren von Technoline, emonTH, Lacrosse",
-      "ru": "читать 868 МГц датчики Technoline, emonTH, Lacrosse",
-      "pt": "read 868Mhz sensors of Technoline, emonTH, Lacrosse",
-      "nl": "lees 868MHz sensoren van Technoline, emonTH, Lacrosse",
-      "fr": "lire les capteurs 868Mhz de Technoline, emonTH, Lacrosse",
-      "it": "leggi i sensori 868Mhz di Technoline, emonTH, Lacrosse",
-      "es": "leer sensores de 868Mhz de Technoline, emonTH, Lacrosse",
-      "pl": "przeczytaj czujniki 868Mhz Technoline, emonTH, Lacrosse"
+      "en": "read 868Mhz sensors of Technoline, emonTH, Lacrosse, EC3000",
+      "de": "Einlesen der 868Mhz Sensoren von Technoline, emonTH, Lacrosse, EC3000",
+      "ru": "читать 868 МГц датчики Technoline, emonTH, Lacrosse, EC3000",
+      "pt": "read 868Mhz sensors of Technoline, emonTH, Lacrosse, EC3000",
+      "nl": "lees 868MHz sensoren van Technoline, emonTH, Lacrosse, EC3000",
+      "fr": "lire les capteurs 868Mhz de Technoline, emonTH, Lacrosse, EC3000",
+      "it": "leggi i sensori 868Mhz di Technoline, emonTH, Lacrosse, EC3000",
+      "es": "leer sensores de 868Mhz de Technoline, emonTH, Lacrosse, EC3000",
+      "pl": "przeczytaj czujniki 868Mhz Technoline, emonTH, Lacrosse, EC3000"
     },
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "license": "MIT",
-    "keywords": [
-      "lacrossegateway",
-      "openenergy",
-      "RFM",
-      "LaCrosse",
-      "emonTH"
-    ],
+        "keywords": [
+        "ioBroker",
+        "Jeelink",
+        "Lacrossegateway",
+        "Lacrosse",
+        "Openenergy",
+        "RFM12B",
+        "EMT7110",
+        "Technoline",
+        "EC3000",
+        "EC3K"
+    ], 
     "type": "hardware",
     "icon": "jeelab_logo.png",
     "extIcon": "https://raw.githubusercontent.com/Innovatone/ioBroker.lacrossegateway/master/admin/jeelab_logo.png",
@@ -167,8 +172,8 @@
     ]
   },
   "native": {
-    "iphost": "",
-    "ipport": "",
+    "host": "",
+    "port": "",
     "command": ""
   },
   "objects": [],
@@ -191,7 +196,8 @@
         "role": "list",
         "read": true,
         "write": true,
-        "desc": "new Devices"
+        "desc": "new Devices",
+        "localLink": "http://%host%:%port%"
       },
       "native": {}
     }

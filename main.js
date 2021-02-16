@@ -1866,17 +1866,11 @@ function main() {
         }
     }
 
-    var options = {
-        clientPort:   parseInt(adapter.config.ipport)
-    };
-
-    adapter.log.debug('configured IP address : ' + adapter.config.iphost );
-    adapter.log.debug('configured IP port : ' + adapter.config.ipport );
-    //adapter.log.debug('options : ' + JSON.stringify(options) );   
+    adapter.log.debug('LGW configured: ' + adapter.config.host + ':' + adapter.config.port);
     const client = new TcpClient.Socket();
-        //const client = new net.Socket(adapter.config.ipport, adapter.config.ipaddress, function (error) {
-    client.connect(adapter.config.ipport, adapter.config.iphost, function (connect) {
-        adapter.log.info('open: ' + adapter.config.iphost + ':' + adapter.config.ipport);
+        //const client = new net.Socket(adapter.config.port, adapter.config.ipaddress, function (error) {
+    client.connect(adapter.config.port, adapter.config.host, function (connect) {
+        adapter.log.info('open: ' + adapter.config.host + ':' + adapter.config.port);
         client.setEncoding('utf-8');
     });
 
@@ -1942,8 +1936,8 @@ function main() {
             client.end(function (end) {
                 adapter.log.debug('closed...');
                 timer2 = setTimeout(function () {
-                    client.connect(adapter.config.ipport, adapter.config.iphost, function (connect) {
-                        adapter.log.info('open: ' + adapter.config.iphost + ':' + adapter.config.ipport);
+                    client.connect(adapter.config.port, adapter.config.host, function (connect) {
+                        adapter.log.info('open: ' + adapter.config.host + ':' + adapter.config.port);
                         client.setEncoding('utf-8');
                     });
                 }, 15000); // 15 Sekunden warten bis open

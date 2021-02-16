@@ -77,9 +77,9 @@
     "es": "tipos de sensor válidos:",
     "pl": "prawidłowe typy czujników:"
   },
-  "iphost": {
-    "en": "ip address",
-    "de": "IP Adresse",
+  "host": {
+    "en": "host or ip",
+    "de": "Host or IP",
     "ru": "Серийный порт",
     "pt": "porta serial",
     "nl": "seriele poort",
@@ -88,9 +88,9 @@
     "es": "Puerto serial",
     "pl": "Port szeregowy"
   },
-  "ipport": {
-    "en": "ip port",
-    "de": "IP Port",
+  "port": {
+    "en": "port",
+    "de": "Port",
     "ru": "бод",
     "pt": "taxa de transmissão",
     "nl": "baudrate",
