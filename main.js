@@ -248,8 +248,6 @@ function defineemonWater(id){
     });
 }
 
-
-
 function logemonWater(data){
     var tmp = data.split(' ');
     //we are expecting data in form \"OK nodeid data1 data2 etc
@@ -576,7 +574,6 @@ function defineHMS100TF(id, name){
     });
 }
 
-
 function logHMS100TF(data){
     var tmp = data.split('');
     if(tmp[0]==='H'){                      // Wenn ein Datensatz sauber gelesen wurde
@@ -734,6 +731,7 @@ function logEMT7110(data){
         }
     }
 }
+
 // EC3000 openhab
 // OK 22 188 129 0   209 209 102 0   174 89  187 0   1   123 102 0   0   10  117 2   0 (ID = BC81) 
 //
@@ -864,13 +862,29 @@ function logEC3000(data){
             var tmpp=tmp.splice(2,21);       // es werden die vorderen Blöcke (0,1,2) entfernt
             adapter.log.debug('splice       : '+ tmpp);
             
-            var id = (parseInt(tmpp[0])*256 + parseInt(tmpp[1]));
+            var id = (parseInt(tmpp[0])*256 + parseInt(tmpp[1])).toString(16).toUpperCase();
             var array=getConfigObjects(adapter.config.sensors, 'sid', id);
             if (array.length === 0 || array.length !== 1) {
                 adapter.log.debug('received ID :' + id + ' is not defined in the adapter or not unique received address');
+
+                adapter.getForeignObject('system.adapter.' + adapter.namespace, function(err,obj){
+                    if (err){
+                        adapter.log.error(err);
+                    }
+                    else {
+                        adapter.log.debug("native object : " + JSON.stringify(obj.native.sensors));
+                        obj.native.sensors.push({"sid":id , "usid":"nodef" , "stype":"EC3000" , "name":"room???"});
+                        adapter.setForeignObject('system.adapter.' + adapter.namespace, obj, function(err){
+                           if(err) {adapter.log.error(err);}
+                           else{
+                               adapter.log.info("new sensor ID = " + id + " added to config, please see admin page of adapter for further configuration");
+                           }
+                        });
+                    }
+                });
             }
             else if (array[0].stype !==  'EC3000'){
-                adapter.log.debug('received ID :' + id + ' is not defined in the adapter as LaCrosseWS');
+                adapter.log.debug('received ID :' + id + ' is not defined in the adapter as EC3000');
             }
             else if (array[0].usid != 'nodef'){
                 adapter.log.debug('Station ID   : '+ id );
@@ -880,8 +894,7 @@ function logEC3000(data){
                 adapter.log.debug('power        : '+ ( (parseInt(tmpp[14]) *256 ) + (parseInt(tmpp[15]))  ) );
                 adapter.log.debug('max power    : '+ ( (parseInt(tmpp[16]) *256 ) + (parseInt(tmpp[17]))  ) );
                 adapter.log.debug('resets       : '+ ( parseInt(tmpp[18]))  );
-                // Werte schreiben
-                // aus gesendeter ID die unique ID bestimmen
+                // Werte schreiben aus gesendeter ID die unique ID bestimmen
                 adapter.setState('EC3000_'+ array[0].usid +'.total',    {val: ( (parseInt(tmpp[2]) *16777216 ) + (parseInt(tmpp[3]) *65536)+ (parseInt(tmpp[4]) *256) + (parseInt(tmpp[5]))  ), ack: true});
                 adapter.setState('EC3000_'+ array[0].usid +'.ontime',   {val: ( (parseInt(tmpp[6]) *16777216 ) + (parseInt(tmpp[7]) *65536)+ (parseInt(tmpp[8]) *256) + (parseInt(tmpp[9]))  ), ack: true});
                 adapter.setState('EC3000_'+ array[0].usid +'.energy',   {val: ( (parseInt(tmpp[10]) *16777216 ) + (parseInt(tmpp[11]) *65536)+ (parseInt(tmpp[12])  *256) + (parseInt(tmpp[13]))  ), ack: true});
@@ -892,7 +905,6 @@ function logEC3000(data){
         }
     }
 }
-
 
 // LevelSender FHEM
 // Format
@@ -1038,8 +1050,6 @@ ID: 8C, T=  8.0`C, relH= 96%, Wvel=  0.0m/s, Wmax=  0.0m/s, Wdir=E  , Rain=  40.
 // |  |------------------- [1]fix "9"
 // |---------------------- [0]fix "OK"
 
-
-
 function defineLaCrosseDTH(id, name, stype){
     adapter.setObjectNotExists('LaCrosse_' + id, {
         type: 'channel',
@@ -1167,7 +1177,6 @@ function defineLaCrosseDTH(id, name, stype){
     });
 }
 
-
 function logLaCrosseDTH(data){
     var tmp = data.split(' ');
     if(tmp[0]==='OK'){                      // Wenn ein Datensatz sauber gelesen wurde
@@ -1243,7 +1252,6 @@ function logLaCrosseDTH(data){
         }
     }
 }
-
 
 // Weather Station TX22IT same as WS1600
 //OK WS 60  1   4   193 52    2 88  4   101 15  20          ID=60  21.7°C  52%rH  600mm  Dir.: 112.5°  Wind:15m/s  Gust:20m/s
@@ -1452,7 +1460,6 @@ function defineLaCrosseWS(id, name){
         native: {}
     });
 }
-
 
 function logLaCrosseWS(data){
     var tmp = data.split(' ');
@@ -1756,8 +1763,6 @@ function defineLaCrosseBMP180(id, name) {
     });
 }
 
-
-
 function logLaCrosseBMP180(data) {
     var tmp = data.split(' ');
     if (tmp[0] === 'OK') {                      // Wenn ein Datensatz sauber gelesen wurde
@@ -1815,18 +1820,6 @@ function logValue(data) {
     adapter.setState('LaCrosseGW.uptimetext', { val: uptime[1], ack: true });
 }
 
-// function write_cmd(command){
-
-
-
-//             sp.write(command, function(err) {
-//                 if (err) {
-//                     return adapter.log.debug('Error on write: ', err.message);
-//                     }
-//                 adapter.log.debug('message to USB-stick written : ' + command);
-//             });
-//         }
-
 function main() {
 
     // The adapters config (in the instance object everything under the attribute "native") is accessible via
@@ -1876,7 +1869,7 @@ function main() {
 
         if (adapter.config.command != '') {
             adapter.log.debug('Sending message: ' + adapter.config.command);
-            setTimeout(socket.write(adapter.config.command + '\r\n'), 500); //0,5s Verzögerung
+            socket.write(adapter.config.command + '\r\n'); //0,5s Verzögerung
         }
     });
 
