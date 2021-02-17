@@ -9,6 +9,8 @@ const net = require('net');
 var timer = null;
 var timer2 = null;
 
+let objects   = {};
+
 // you have to require the utils module and call adapter function
 const utils =  require('@iobroker/adapter-core'); // Get common adapter utils
 
@@ -863,6 +865,23 @@ function logEC3000(data){
             adapter.log.debug('splice       : '+ tmpp);
             
             var id = (parseInt(tmpp[0])*256 + parseInt(tmpp[1])).toString(16).toUpperCase();
+            adapter.log.debug('The EC3000 ID is: ' + id);
+
+            adapter.getForeignObject(obj._id, (err, oObj) => {
+                adapter.log.debug('Foreign Objects: ' + JSON.stringify(oObj));
+            }
+
+            // adapter.log.debug('All Objects: ' + JSON.stringify(objects));
+
+
+            // if (!objects[adapter.namespace + '.devices.' + device.className.replace('.', '_') + '_' + device.sid]) {
+            //     adapter.log.debug('NEW device: ' + device.sid + '(' + device.type + ')');       // Here's the output in Log ioBrokera of the lines NEW device:
+            //     createDevice(device, name);
+            // } else {
+            //     adapter.log.debug('known device: ' + device.sid + '(' + device.type + ')');
+            // }
+
+
             var array=getConfigObjects(adapter.config.sensors, 'sid', id);
             if (array.length === 0 || array.length !== 1) {
                 adapter.log.debug('received ID :' + id + ' is not defined in the adapter or not unique received address');
