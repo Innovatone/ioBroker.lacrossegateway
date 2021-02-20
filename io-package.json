@@ -164,6 +164,7 @@
     "loglevel": "debug",
     "materialize": true,
     "compact": true,
+    "localLink": "http://%host%:%port%",
     "authors": [
       {
         "name": "Innovatone",
@@ -176,30 +177,5 @@
     "port": "",
     "command": ""
   },
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "foundDevices",
-      "type": "channel",
-      "common": {
-        "name": "foundDevices",
-        "role": "device"
-      },
-      "native": {}
-    },
-    {
-      "_id": "foundDevices.state",
-      "type": "state",
-      "common": {
-        "name": "new Devices",
-        "type": "array",
-        "role": "list",
-        "read": true,
-        "write": true,
-        "desc": "new Devices",
-        "localLink": "http://%host%:%port%"
-      },
-      "native": {}
-    }
-  ]
+  "objects": []
 }

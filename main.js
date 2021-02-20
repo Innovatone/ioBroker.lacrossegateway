@@ -867,12 +867,6 @@ function logEC3000(data){
             var id = (parseInt(tmpp[0])*256 + parseInt(tmpp[1])).toString(16).toUpperCase();
             adapter.log.debug('The EC3000 ID is: ' + id);
 
-            adapter.getForeignObject(obj._id, (err, oObj) => {
-                adapter.log.debug('Foreign Objects: ' + JSON.stringify(oObj));
-            }
-
-            // adapter.log.debug('All Objects: ' + JSON.stringify(objects));
-
 
             // if (!objects[adapter.namespace + '.devices.' + device.className.replace('.', '_') + '_' + device.sid]) {
             //     adapter.log.debug('NEW device: ' + device.sid + '(' + device.type + ')');       // Here's the output in Log ioBrokera of the lines NEW device:
@@ -885,22 +879,27 @@ function logEC3000(data){
             var array=getConfigObjects(adapter.config.sensors, 'sid', id);
             if (array.length === 0 || array.length !== 1) {
                 adapter.log.debug('received ID :' + id + ' is not defined in the adapter or not unique received address');
-
-                adapter.getForeignObject('system.adapter.' + adapter.namespace, function(err,obj){
-                    if (err){
-                        adapter.log.error(err);
-                    }
-                    else {
-                        adapter.log.debug("native object : " + JSON.stringify(obj.native.sensors));
-                        obj.native.sensors.push({"sid":id , "usid":"nodef" , "stype":"EC3000" , "name":"room???"});
-                        adapter.setForeignObject('system.adapter.' + adapter.namespace, obj, function(err){
-                           if(err) {adapter.log.error(err);}
-                           else{
-                               adapter.log.info("new sensor ID = " + id + " added to config, please see admin page of adapter for further configuration");
-                           }
-                        });
-                    }
-                });
+                
+                // adapter.getState('foundDevices.state', function(err,state){
+                //     if (err){
+                //         adapter.log.error(err);
+                //     }
+                //     else {
+                //         adapter.log.debug("found devices : " + JSON.stringify(state));
+                //         var found = []; //alte Wert erstmal nicht übernehmen, damit nur ein neuer Sensor erscheint
+                //         found.push({"sid":tmp[2],"usid":"nodef","stype":"emon???","name":"room???"});
+                //         adapter.log.debug("found push = " + JSON.stringify(found));
+                //         adapter.setState('foundDevices.state', {val: found, ack: true}, function(err){
+                       
+                //             if(err) {
+                //                 adapter.log.error(err);
+                //             }
+                //             else{
+                //             adapter.log.info("new sensor ID = "+ tmp[2] + " added to foundDevices, please see admin page of adapter for further configuratiuon");
+                //             }
+                //         });
+                //     }
+                // });
             }
             else if (array[0].stype !==  'EC3000'){
                 adapter.log.debug('received ID :' + id + ' is not defined in the adapter as EC3000');

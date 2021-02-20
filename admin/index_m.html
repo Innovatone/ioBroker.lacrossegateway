@@ -54,18 +54,6 @@
                 setValue(key, settings[key], onChange);
             }
             values2table('values', sensors, onChange);
-            /**
-            socket.emit('subscribeObjects',  'lacrossegateway.' + instance + '.*');
-            socket.emit('subscribeStates',  'lacrossegateway.' + instance + '.*');
-            socket.emit('getState', 'lacrossegateway.' + instance + '.foundDevices.val', function (err, state) {
-                console.log("got the following config : "+ JSON.stringify(state));
-                        if (!err) {
-                            showMessage("new devices found " +JSON.stringify(state) );
-                        } else {
-                            showError(err);
-                        }
-                });
-            **/
 
             //add button
             $('#table-button-search').click(function () {
