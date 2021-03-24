@@ -1,6 +1,6 @@
 {
   "name": "iobroker.lacrossegateway",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "ioBroker LaCrosseGateway Jeelink adapter",
   "author": {
     "name": "Innovatone",
@@ -36,7 +36,6 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0",
-    "node-net-reconnect":"^0.2.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

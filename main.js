@@ -1,7 +1,7 @@
 "use strict";
 
-let socket = net require('net').Socket()
-let Reconnect = require('node-net-reconnect')
+const client = new net.Socket()
+var intervalConnect = false;
 
 //var timer = null;
 //var timer2 = null;
@@ -1833,6 +1833,28 @@ function logValue(data) {
     adapter.setState('LaCrosseGW.uptimetext', { val: uptime[1], ack: true });
 }
 
+function connect() {        
+    client.connect({
+        port: adapter.config.port,
+        host: adapter.config.host
+    })
+    adapter.log.debug('CONNECTING TO LGW: ' + adapter.config.host + ':' + adapter.config.port);
+    client.setEncoding('utf-8');
+}
+
+function launchIntervalConnect() {
+    if (false != intervalConnect) 
+        return
+    intervalConnect = setInterval(connect, 5000)
+}
+
+function clearIntervalConnect() {
+    if (false == intervalConnect) 
+        return
+    clearInterval(intervalConnect)
+    intervalConnect = false
+}
+
 function main() {
 
     // The adapters config (in the instance object everything under the attribute "native") is accessible via
@@ -1874,47 +1896,33 @@ function main() {
         }
     }
 
-    let options = { 
-      'host' : adapter.config.host, 
-      'port' : adapter.config.port,
-      'retryTime' : 10000, // retry every 10s
-      'retryAlways' : true // retry even if the connection was closed on purpose
-    }
-
-    let recon = new Reconnect(socket, options)
-    socket.connect(options) {
-        socket.setEncoding('utf-8');
-        adapter.log.debug('CONNECTING TO LGW: ' + adapter.config.host + ':' + adapter.config.port);
-    }
-
-    socket.on('connect', function () {
+    client.on('connect', () => {
+        clearIntervalConnect()
         adapter.log.debug('CONNECTED TO LGW';
         if (adapter.config.command != '') {
             adapter.log.debug('Sending message: ' + adapter.config.command);
-            socket.write(adapter.config.command + '\r\n');
+            client.write(adapter.config.command + '\r\n');
         }
-    });
+    })
 
-    socket.on('error', function(exception){
-        adapter.log.info('ERROR: failed to open: ' + error);
-        adapter.log.debug('Exception:' + exception);
-    });
+    client.on('error', (err) => {
+        adapter.log.info('TCP ERROR: ' + err.code);
+        launchIntervalConnect()
+    })
 
-    socket.on('drain', function() {
+    client.on('close', launchIntervalConnect)
+    client.on('end', launchIntervalConnect)
+
+    client.on('drain', function() {
         adapter.log.debug("ERROR: drain!");
     });
 
-    socket.on('timeout', function() {
+    client.on('timeout', function() {
         adapter.log.debug("ERROR: timeout!");
     });
 
-    // Add a 'close' event handler for the client socket
-    socket.on('close', function() {
-        adapter.log.debug('Connection closed');
-    });
-
     // Add a 'data' event handler for the client socket data is what the server sent to this socket
-    socket.on('data', function(data) {        
+    client.on('data', function(data) {        
         if (data != ''){
             adapter.log.debug('DATA: ' + data);
             if (data.startsWith('H0')){
@@ -1961,21 +1969,6 @@ function main() {
         if (state && !state.ack) {
             adapter.log.debug('ack is not set!');
         };
-        /*
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(function () {
-            adapter.log.error('Verbindung zum LGW unterbrochen');
-            socket.end(function (end) {
-                adapter.log.debug('Socket closed...');
-                timer2 = setTimeout(function () {
-                    socket.connect(adapter.config.port, adapter.config.host, function (connect) {
-                        adapter.log.info('open: ' + adapter.config.host + ':' + adapter.config.port);
-                        socket.setEncoding('utf-8');
-                    });
-                }, 15000); // 15 Sekunden warten bis open
-            });
-        }, 120000); // 120 Sekunden auf state change warten
-        */
     })
 }
 
