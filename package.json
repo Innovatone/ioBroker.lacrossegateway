@@ -1,6 +1,6 @@
 {
   "name": "iobroker.lacrossegateway",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "ioBroker LaCrosseGateway Jeelink adapter",
   "author": {
     "name": "Innovatone",
@@ -41,7 +41,8 @@
     "gulp": "^3.9.1",
     "mocha": "^4.1.0",
     "chai": "^4.1.2",
-    "proxyquire":"^2.1.0"
+    "proxyquire":"^2.1.0",
+    "node-net-reconnect":"^0.2.1"    
   },
   "bugs": {
     "url": "https://github.com/Innovatone/ioBroker.lacrossegateway/issues"

@@ -1,15 +1,10 @@
-/* jshint -W097 */// jshint strict:false
-/*jslint node: true */
 "use strict";
 
-//const SerialPort = require("serialport");
-//const Readline = SerialPort.parsers.Readline;
-const net = require('net');
+let socket = net require('net').Socket()
+let Reconnect = require('node-net-reconnect')
 
-var timer = null;
-var timer2 = null;
-
-let objects   = {};
+//var timer = null;
+//var timer2 = null;
 
 // you have to require the utils module and call adapter function
 const utils =  require('@iobroker/adapter-core'); // Get common adapter utils
@@ -1868,26 +1863,35 @@ function main() {
         if(obj[anz].stype=="LaCrosseWS"){
             defineLaCrosseWS(obj[anz].usid, obj[anz].name);
         }
-    if(obj[anz].stype=="EC3000"){
+        if(obj[anz].stype=="EC3000"){
             defineEC3000(obj[anz].usid, obj[anz].name);
         }
         if(obj[anz].stype=="EMT7110"){
             defineEMT7110(obj[anz].usid, obj[anz].name);
         }
-    if(obj[anz].stype=="level"){
+        if(obj[anz].stype=="level"){
             defineLevel(obj[anz].usid, obj[anz].name);
         }
     }
 
-    var socket = new net.Socket();
-   
-    socket.connect (adapter.config.port, adapter.config.host, function() {
-        socket.setEncoding('utf-8');
-        adapter.log.debug('CONNECTED TO LGW: ' + adapter.config.host + ':' + adapter.config.port);
+    let options = { 
+      'host' : adapter.config.host, 
+      'port' : adapter.config.port,
+      'retryTime' : 10000, // retry every 10s
+      'retryAlways' : true // retry even if the connection was closed on purpose
+    }
 
+    let recon = new Reconnect(socket, options)
+    socket.connect(options) {
+        socket.setEncoding('utf-8');
+        adapter.log.debug('CONNECTING TO LGW: ' + adapter.config.host + ':' + adapter.config.port);
+    }
+
+    socket.on('connect', function () {
+        adapter.log.debug('CONNECTED TO LGW';
         if (adapter.config.command != '') {
             adapter.log.debug('Sending message: ' + adapter.config.command);
-            socket.write(adapter.config.command + '\r\n'); //0,5s Verzögerung
+            socket.write(adapter.config.command + '\r\n');
         }
     });
 
@@ -1952,11 +1956,12 @@ function main() {
     // in this template all states changes inside the adapters namespace are subscribed
     adapter.subscribeStates('*');
     adapter.on('stateChange', function (id, state) {
-        adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
+        //adapter.log.debug('stateChange ' + id + ' ' + JSON.stringify(state));
         // you can use the ack flag to detect if it is status (true) or command (false)
         if (state && !state.ack) {
             adapter.log.debug('ack is not set!');
         };
+        /*
         if (timer) clearTimeout(timer);
         timer = setTimeout(function () {
             adapter.log.error('Verbindung zum LGW unterbrochen');
@@ -1970,6 +1975,7 @@ function main() {
                 }, 15000); // 15 Sekunden warten bis open
             });
         }, 120000); // 120 Sekunden auf state change warten
+        */
     })
 }
 
